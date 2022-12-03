@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "module": "NodeNext"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
