@@ -13,4 +13,10 @@ Files strewn across the board which may or may not contain a virus. The players 
 
 ## TODO:
 
-- [] everything
+### Backend
+
+- [ ] Setup DB
+
+### Frontend
+
+- [ ] Setup CSS
