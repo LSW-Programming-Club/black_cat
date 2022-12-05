@@ -9,9 +9,51 @@
 body, html {
     height: 100%;
     display: grid;
-    background-color: #303446;
-    color: #c6d0f5;
+    background-color: #1e1e2e;
+    color: #cdd6f4;
     font-family: 'Roboto Flex', sans-serif;
+}
+
+.neontext {
+  color: #fff;
+  text-shadow:
+    0 0 7px #cdd6f4,
+    0 0 10px #cdd6f4,
+    0 0 21px #cdd6f4,
+    0 0 42px #0fa,
+    0 0 82px #0fa,
+    0 0 92px #0fa,
+    0 0 102px #0fa,
+    0 0 151px #0fa;
+
+    animation: flicker 2s infinite alternate;
+}
+
+@keyframes flicker {
+  100% {
+    /* Larger blur radius */
+    text-shadow:
+      0 0 4px #cdd6f4,
+      0 0 11px #cdd6f4,
+      0 0 19px #cdd6f4,
+      0 0 40px #06f,
+      0 0 80px #06f,
+      0 0 90px #06f,
+      0 0 100px #06f,
+      0 0 150px #06f;
+  }
+  0% {
+    /* Smaller blur radius */
+    text-shadow:
+      0 0 2px #cdd6f4,
+      0 0 4px #cdd6f4,
+      0 0 6px #cdd6f4,
+      0 0 10px #06f,
+      0 0 45px #06f,
+      0 0 55px #06f,
+      0 0 70px #06f,
+      0 0 80px #06f;
+  }
 }
 
 .centerbox {
