@@ -3,6 +3,18 @@ import express from 'express'
 const app = express()
 const port = 18080
 
+// Socket.io setup
+import { createServer } from 'http'
+const httpServer = createServer(app)
+
+import { Server } from 'socket.io'
+const io = new Server(httpServer, {})
+
+import sockets from './lib/sockets'
+io.on('connection', (socket) => {
+  sockets(socket)
+})
+
 // Enable interpreting POST requests
 import bodyParser from 'body-parser'
 app.use(bodyParser.json())
@@ -27,7 +39,8 @@ import { router as game } from './routes/game'
 // Use the imported routers
 app.use('/', root)
 app.use('/game', game)
-// Randomized 404
+
+// 404 Page
 app.use(function (_req, res) {
   res.status(404)
   res.render('pages/root/404')
@@ -35,6 +48,6 @@ app.use(function (_req, res) {
 })
 
 // Have the server listen for incoming requests
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Blue Team is listening on http://127.0.0.1:${port}`)
 })

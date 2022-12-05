@@ -4,10 +4,50 @@
 <head>
   <%- include('../../components/head'); %>
   <title>Blue Team</title>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <h1>This is the main page</h1>
+  <picture>
+    <source srcset="/img/blueTeam.webp" type="image/webp">
+    <source srcset="/img/blueTeam.png" type="image/png">
+    <img src="/img/blueTeam.png" alt="Blue Team Logo"/>
+  </picture>
+  <br>
+  <label for="name">Name:</label>
+  <input id="name"></input>
+  <br>
+  <label for="roomCode">Code:</label>
+  <input id="roomCode"></input>
+  <br>
+  <button onclick="host()">Host</button>
+  <button onclick="join()">Join</button>
 </body>
 
 </html>
+
+<script>
+  const socket = io();
+  function host() {
+    socket.emit('host', document.getElementById('name').value)
+  }
+
+  function join() {
+    var req = {
+      name: document.getElementById('name').value,
+      code: document.getElementById('roomCode').value
+    }
+    socket.emit('join', req)
+  }
+  socket.on('success', function(data) {
+    console.log(data)
+  })
+
+  socket.on('error', function(data) {
+    console.log(data)
+  })
+
+  socket.on('players', function(data) {
+    console.log(data)
+  })
+</script>
