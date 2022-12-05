@@ -22,6 +22,12 @@
   <br>
   <button onclick="host()">Host</button>
   <button onclick="join()">Join</button>
+  <br>
+  <button onclick="classSelect('Scout')">Scout</button>
+  <button onclick="classSelect('Antivirus')">Antivirus</button>
+  <button onclick="classSelect('Firewall')">Firewall</button>
+
+  <input style="display:none" id="id"></input> <!-- Will be moved to game page -->
 </body>
 
 </html>
@@ -39,8 +45,18 @@
     }
     socket.emit('join', req)
   }
+
+  function classSelect(type) {
+    var req = {
+      id: document.getElementById('id').value,
+      code: document.getElementById('roomCode').value,
+      type: type
+    }
+    socket.emit('type', req)
+  }
+
   socket.on('success', function(data) {
-    console.log(data)
+    document.getElementById('roomCode').value = data
   })
 
   socket.on('error', function(data) {
@@ -49,5 +65,9 @@
 
   socket.on('players', function(data) {
     console.log(data)
+  })
+
+  socket.on('id', function(id) {
+    document.getElementById('id').value = id
   })
 </script>
