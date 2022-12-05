@@ -8,24 +8,26 @@
 </head>
 
 <body>
-  <picture>
-    <source srcset="/img/blueTeam.webp" type="image/webp">
-    <source srcset="/img/blueTeam.png" type="image/png">
-    <img src="/img/blueTeam.png" alt="Blue Team Logo"/>
-  </picture>
-  <br>
-  <label for="name">Name:</label>
-  <input id="name"></input>
-  <br>
-  <label for="roomCode">Code:</label>
-  <input id="roomCode"></input>
-  <br>
-  <button onclick="host()">Host</button>
-  <button onclick="join()">Join</button>
-  <br>
-  <button onclick="classSelect('Scout')">Scout</button>
-  <button onclick="classSelect('Antivirus')">Antivirus</button>
-  <button onclick="classSelect('Firewall')">Firewall</button>
+  <div class="centerbox">
+    <picture>
+      <source srcset="/img/blueTeam.webp" type="image/webp">
+      <source srcset="/img/blueTeam.png" type="image/png">
+      <img class="logo" src="/img/blueTeam.png" alt="Blue Team Logo"/>
+    </picture>
+    <br>
+    <div class="inputs">
+      <label for="name">Name:</label>
+      <input id="name"></input>
+      <label for="roomCode">Code:</label>
+      <input id="roomCode"></input>
+    </div>
+    <button onclick="host()">Host</button>
+    <button onclick="join()">Join</button>
+    <br>
+    <button onclick="classSelect('Scout')">Scout</button>
+    <button onclick="classSelect('Antivirus')">Antivirus</button>
+    <button onclick="classSelect('Firewall')">Firewall</button>
+  </div>
 
   <input style="display:none" id="id"></input> <!-- Will be moved to game page -->
 </body>
