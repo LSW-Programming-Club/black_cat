@@ -5,6 +5,8 @@ import type { Socket } from 'socket.io'
 // Declare a dictionary to store the rooms and their players
 class Player {
   id: string
+  host: boolean
+  ready: boolean
   turnOrder: number
   actions: number
   build: string
@@ -12,6 +14,8 @@ class Player {
 
   constructor(name: string) {
     this.id = randomUUID()
+    this.host = false
+    this.ready = false
     this.turnOrder = 0
     this.actions = 2
     this.build = ''
@@ -67,7 +71,7 @@ class Game {
   }
 
   playerList() {
-    return this.players.map((player) => ({ name: player.name, build: player.build }))
+    return this.players.map((player) => ({ name: player.name, build: player.build, ready: player.ready }))
   }
 }
 
@@ -77,11 +81,13 @@ export default (socket: Socket) => {
   // Create a room when a user requests to host a game
   socket.on('host', (name) => {
     const player = new Player(name)
+    player.host = true
     const game = new Game(player)
     games.push(game)
     socket.join(game.code)
     socket.emit('success', game.code)
     socket.emit('id', player.id)
+    socket.emit('players', game.playerList())
   })
 
   socket.on('join', (data) => {
@@ -113,7 +119,7 @@ export default (socket: Socket) => {
     }
   })
 
-  socket.on('type', (data) => {
+  socket.on('build', (data) => {
     // Check if the room exists and if the player exists in the room
     const game = games.find((game) => game.code === data.code)
     if (!game) {
@@ -146,5 +152,35 @@ export default (socket: Socket) => {
     // Emit an updated list of players to all clients in the room
     socket.to(game.code).emit('players', game.playerList())
     socket.emit('players', game.playerList())
+    socket.emit('build', player.build)
+  })
+
+  socket.on('ready', (data) => {
+    const game = games.find((game) => game.code === data.code)
+    if (!game) {
+      // If the room doesn't exist, respond to the client with an error
+      socket.emit('error', 'Failed to update class')
+      return
+    }
+
+    const player = game.players.find((player) => player.id === data.id)
+    if (!player) {
+      // If the player doesn't exist, respond to the client with an error
+      socket.emit('error', 'Failed to find player')
+      return
+    }
+
+    player.ready = !player.ready
+    socket.to(data.code).emit('players', game.playerList())
+    socket.emit('players', game.playerList())
+    socket.emit('ready', player.ready)
+
+    if (game.playerList().filter((player) => player.ready === true).length === game.playerList().length) {
+      const hostID = game.players.find((player) => player.host === true)?.id
+      socket.emit('startAllowed', hostID)
+      socket.to(data.code).emit('startAllowed', hostID)
+    } else {
+      socket.emit('startAllowed', false)
+    }
   })
 }

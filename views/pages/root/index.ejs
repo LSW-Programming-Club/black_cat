@@ -24,6 +24,17 @@
     <button id="scout" onclick="build('Scout')">Scout</button>
     <button id="antivirus" onclick="build('Antivirus')">Antivirus</button>
     <button id="firewall" onclick="build('Firewall')">Firewall</button>
+    <br>
+    <button id="ready" onclick="ready()">Ready</button>
+    <br>
+    <label for="playerList">Players:</label>
+    <ul id="playerList">
+    </ul>
+    <p id="build">Class: </p>
+    <br>
+    <p id="readiness"></p>
+    <br>
+    <button id="start" style="display: none">Start</button>
   </div>
 
   <input style="display:none" id="id"></input> <!-- Will be moved to game page -->
@@ -51,7 +62,15 @@
       code: document.getElementById('roomCode').value,
       build: build
     }
-    socket.emit('type', req)
+    socket.emit('build', req)
+  }
+
+  function ready() {
+    var req = {
+      id: document.getElementById('id').value,
+      code: document.getElementById('roomCode').value
+    }
+    socket.emit('ready', req)
   }
 
   socket.on('success', function(data) {
@@ -63,6 +82,7 @@
   })
 
   socket.on('players', function(data) {
+    // Update roles that user can pick
     if(data.some((player) => player.build === 'Scout')) {
       document.getElementById('scout').style.display = 'none'
     } else {
@@ -78,6 +98,46 @@
     } else {
       document.getElementById('firewall').style.display = 'inline'
     }
+    
+    // Update player list
+    var playerListElement = document.getElementById('playerList');
+    playerListElement.innerHTML = ''; // Clear existing list
+    for (var i = 0; i < data.length; i++) {
+      var player = data[i];
+      playerListElement.innerHTML += '<li>' + player.name + '</li>';
+    }
+
+    // Update readiness of players
+    const readyMessage = document.getElementById('readiness')
+    readyMessage.innerText = data.filter((player) => player.ready === true).length + '/' + data.length + ' players ready'
+    if (data.length < 3) {
+      readyMessage.innerText += ` Still need ${3-data.length} more player`
+      if (3-data.length > 1) {
+        readyMessage.innerText += 's'
+      }
+    }
+  })
+
+  socket.on('ready', function(ready) {
+    // Updates readiness
+      if (ready) {
+        document.getElementById('ready').innerText = 'Cancel'
+        return
+      }
+      document.getElementById('ready').innerText = 'Ready'
+  })
+
+  socket.on('startAllowed', function(id) {
+    if (id === document.getElementById('id').value) {
+      document.getElementById('start').style.display = 'inline'
+    }
+    else {
+      document.getElementById('start').style.display = 'none'
+    }
+  })
+
+  socket.on('build', function(build) {
+    document.getElementById('build').innerText = 'Class: ' + build
   })
 
   socket.on('id', function(id) {
