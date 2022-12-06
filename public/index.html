@@ -26,9 +26,10 @@
 </head>
 
 <body>
-  <div class="centerbox">
+  <div id="centerbox">
     <span style="font-size: 60pt;" class="neontext">Blue Team</span>
-    <p style="font-size: 24pt;text-align: center;animation: flicker 1s infinite alternate;" class="neontext">- the game
+    <p style="font-size: 24pt;text-align: center;animation: flicker 1s infinite alternate;" class="neontext">- the
+      game
       -</p>
     <br>
     <p id="error"></p>
@@ -55,7 +56,11 @@
     <br>
     <p id="readiness"></p>
     <br>
-    <button id="start" style="display: none">Start</button>
+    <button id="start" style="display: none" onclick="start()">Start</button>
+  </div>
+  <div id="game">
+    <button id="move" onclick="action('move')">Move</button>
+    <button id="detect" onclick="action('detect')">Detect</button>
   </div>
 </body>
 
@@ -63,6 +68,22 @@
 
 <script>
   const socket = io();
+
+  function start() {
+    socket.emit('start', document.getElementById('roomCode').value)
+  }
+  function action(action) {
+    socket.emit('action', document.getElementById('roomCode').value, action, 1)
+  }
+
+  socket.on('file', function (files) {
+    console.log(files)
+  })
+
+  socket.on('start', function (start) {
+    document.getElementById('centerbox').style.display = 'none'
+  })
+
   function host() {
     socket.emit('host', document.getElementById('playerName').value)
   }

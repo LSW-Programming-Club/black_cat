@@ -24,7 +24,7 @@ function handleAction(socket: Socket, roomCode: string, action: string, fileID: 
   const game = games.find((game) => game.code === roomCode)
   if (game) {
     const player = game.players.find((player) => player.id === socket.id)
-    if (player) {
+    if (player && player.class in actions) {
       if (!actions[player.class].includes(action)) {
         // Prevent the player from performing the action
         socket.emit('error', `${player.class} can't use ${action}`)

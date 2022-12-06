@@ -2,16 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz@8..144&display=swap');
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-body, html {
-    height: 100%;
-    display: grid;
-    background-color: #1e1e2e;
-    color: #cdd6f4;
-    font-family: 'Roboto Flex', sans-serif;
+body,
+html {
+  height: 100%;
+  display: grid;
+  background-color: #1e1e2e;
+  color: #cdd6f4;
+  font-family: 'Roboto Flex', sans-serif;
 }
 
 .neontext {
@@ -26,7 +27,7 @@ body, html {
     0 0 102px #0fa,
     0 0 151px #0fa;
 
-    animation: flicker 2s infinite alternate;
+  animation: flicker 2s infinite alternate;
 }
 
 @keyframes flicker {
@@ -42,6 +43,7 @@ body, html {
       0 0 100px #06f,
       0 0 150px #06f;
   }
+
   0% {
     /* Smaller blur radius */
     text-shadow:
@@ -56,23 +58,23 @@ body, html {
   }
 }
 
-.centerbox {
-    margin: auto;
-    max-width: 500px;
-    border-radius: 5px;
-    background-color: #292c3c;
-    padding: 10px;
+#centerbox {
+  margin: auto;
+  max-width: 500px;
+  border-radius: 5px;
+  background-color: #292c3c;
+  padding: 10px;
 }
 
-.centerbox .logo {
-    max-width: 300px;
-    margin-bottom: 20px;
+#centerbox .logo {
+  max-width: 300px;
+  margin-bottom: 20px;
 }
 
-.centerbox .inputs {
-    display: flex;
-    flex-direction: column;
-    padding: 2px;
-    font-size: 15pt;
-    margin-bottom: 20px;
+#centerbox .inputs {
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  font-size: 15pt;
+  margin-bottom: 20px;
 }

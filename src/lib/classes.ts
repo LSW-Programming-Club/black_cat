@@ -23,7 +23,7 @@ export class File {
   public goodData: number
   public badData: number
   public size: number
-  public x: string
+  public x: number
   public y: number
 
   constructor(id: number) {
@@ -31,8 +31,12 @@ export class File {
     this.goodData = randomInt(1, 3)
     this.badData = randomInt(0, 3)
     this.size = this.goodData + this.badData
-    this.x = 'A'
+    this.x = 1
     this.y = 1
+  }
+
+  xToString(x: number) {
+    return String.fromCharCode(64 + x)
   }
 }
 
@@ -49,7 +53,7 @@ export class Game {
     this.host = player.id
     this.round = 0
     this.hp = 10
-    this.files = [new File(1), new File(2), new File(3)]
+    this.files = [new File(1), new File(2), new File(3), new File(4), new File(5)]
     this.players = [player]
   }
 
