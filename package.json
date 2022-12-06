@@ -1,6 +1,6 @@
 {
   "name": "blue-team",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "src/index.js",
   "repository": "https://git.g2gaming.org/LSW-innnovators/blue-team.git",
   "license": "GPL-3.0",

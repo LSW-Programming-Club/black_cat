@@ -132,16 +132,16 @@
 
     // Update player list
     document.getElementById('playerList').innerHTML = ''; // Clear existing list
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < playerData.length; i++) {
       var player = playerData[i];
       document.getElementById('playerList').innerHTML += '<li>' + player.name + '</li>';
     }
 
     // Update readiness of players
-    document.getElementById('readiness').innerText = data.filter((player) => player.ready === true).length + '/' + data.length + ' players ready'
-    if (data.length < 3) {
-      document.getElementById('readiness').innerText += ` Still need ${3 - data.length} more player`
-      if (3 - data.length > 1) {
+    document.getElementById('readiness').innerText = playerData.filter((player) => player.ready === true).length + '/' + playerData.length + ' players ready'
+    if (playerData.length < 3) {
+      document.getElementById('readiness').innerText += ` Still need ${3 - playerData.length} more player`
+      if (3 - playerData.length > 1) {
         document.getElementById('readiness').innerText += 's'
       }
     }

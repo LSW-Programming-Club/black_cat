@@ -143,7 +143,7 @@ function handleReady(socket: Socket, roomCode: string) {
   socket.to(roomCode).emit('players', game.playerList())
   socket.emit('players', game.playerList())
 
-  if (game.playerList().length === 3 && game.playerList().filter((player) => player.ready === true).length === game.playerList().length) {
+  if (game.players.length === 3 && game.playerList().filter((player) => player.ready === true).length === game.playerList().length) {
     socket.emit('startAllowed', game.host)
     socket.to(roomCode).emit('startAllowed', game.host)
   } else {
@@ -159,7 +159,7 @@ function handleClose(socket: Socket) {
     socket.to(game.code).emit('players', game.playerList())
 
     // If there is still a game make the next in line user host
-    if (game.host === socket.id) {
+    if (game.host === socket.id && game.players.length != 0) {
       game.host = game.players[0].id
     }
   }
