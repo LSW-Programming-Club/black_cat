@@ -3,30 +3,28 @@ import { randomBytes, randomInt } from 'crypto'
 import { games } from './db'
 
 export class Player {
-  id: string
-  ready: boolean
-  turnOrder: number
-  actions: number
-  class: string
-  name: string
+  public readonly id: string
+  public name: string
+  public class: string
+  public ready: boolean
+  public actions: number
 
   constructor(name: string, id: string) {
     this.id = id
-    this.ready = false
-    this.turnOrder = 0
-    this.actions = 2
-    this.class = ''
     this.name = name
+    this.class = ''
+    this.ready = false
+    this.actions = 2
   }
 }
 
 export class File {
-  id: number
-  size: number
-  goodData: number
-  badData: number
-  x: string
-  y: number
+  public readonly id: number
+  public goodData: number
+  public badData: number
+  public size: number
+  public x: string
+  public y: number
 
   constructor(id: number) {
     this.id = id
@@ -39,12 +37,12 @@ export class File {
 }
 
 export class Game {
-  code: string
-  host: string
-  round: number
-  hp: number
-  files: File[]
-  players: Player[]
+  public readonly code: string
+  public host: string
+  public round: number
+  public hp: number
+  public files: File[]
+  public players: Player[]
 
   constructor(player: Player) {
     this.code = this.createCode()

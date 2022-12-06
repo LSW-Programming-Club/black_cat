@@ -39,10 +39,10 @@ function handleHost(socket: Socket, playerName: string) {
   // Set user to be the host
   game.host = socket.id
 
-  // Create the room and push the code to the user
+  // Create the room and push the code and player list to the user
   socket.join(game.code)
   socket.emit('code', game.code)
-  socket.emit('players', game.playerList()) // TODO: Not required?
+  socket.emit('players', game.playerList())
 }
 
 function handleJoin(socket: Socket, roomCode: string, playerName: string) {
