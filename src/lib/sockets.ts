@@ -1,4 +1,4 @@
-import { randomBytes, randomInt, randomUUID } from 'crypto'
+import { randomBytes, randomInt } from 'crypto'
 
 import type { Socket } from 'socket.io'
 
@@ -12,8 +12,8 @@ class Player {
   build: string
   name: string
 
-  constructor(name: string) {
-    this.id = randomUUID()
+  constructor(name: string, id: string) {
+    this.id = id
     this.host = false
     this.ready = false
     this.turnOrder = 0
@@ -80,7 +80,7 @@ const games: Game[] = []
 export default (socket: Socket) => {
   // Create a room when a user requests to host a game
   socket.on('host', (name) => {
-    const player = new Player(name)
+    const player = new Player(name, socket.id)
     player.host = true
     const game = new Game(player)
     games.push(game)
@@ -94,18 +94,30 @@ export default (socket: Socket) => {
     // Check if the room exists
     const game = games.find((game) => game.code === data.code)
     if (game) {
-      // Add the client to the room
-      socket.join(data.code)
+      // If player already in session send error
+      if (game.players.some((player) => player.id === socket.id)) {
+        socket.emit('error', 'Already in this room')
+        return
+      }
+      // If lobby is full inform user
+      if (game.players.length >= 3) {
+        socket.emit('error', 'This lobby is full')
+        return
+      }
 
-      // Add the client's name and class to the list of players in the room (ensure no duplicate names)
+      // Add the client's name to the list of players in the room (ensure no duplicate names)
       let newName = data.name
       if (games.find((game) => game.code === data.code)) {
         for (let i = 2; game.players.some((player) => player.name === newName); i++) {
           newName = data.name + ' (' + i + ')'
         }
       }
-      const player = new Player(newName)
+      const player = new Player(newName, socket.id)
       game.addPlayer(player)
+
+      // Add the client to the room
+      socket.join(data.code)
+
       // Respond to the client with the room code
       socket.emit('success', data.code)
 
@@ -181,6 +193,22 @@ export default (socket: Socket) => {
       socket.to(data.code).emit('startAllowed', hostID)
     } else {
       socket.emit('startAllowed', false)
+    }
+  })
+
+  // Remove user if they disconnect from the lobby
+  socket.conn.on('close', (_reason) => {
+    const game = games.find((game) => game.players.some((player) => player.id === socket.id))
+    // If user was in game remove them from the game
+    if (game) {
+      game.players = game.players.filter((player) => player.id !== socket.id)
+      socket.to(game.code).emit('players', game.playerList())
+
+      // If there is still a game make a random user host
+      if (game.players.length > 0 && !game.players.some((player) => player.host)) {
+        const newHostIndex = Math.floor(Math.random() * game.players.length)
+        game.players[newHostIndex].host = true
+      }
     }
   })
 }
