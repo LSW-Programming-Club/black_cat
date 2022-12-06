@@ -2,15 +2,34 @@
 <html>
 
 <head>
-  <%- include('../../components/head'); %>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+
   <title>Blue Team</title>
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+    integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
   <div class="centerbox">
     <span style="font-size: 60pt;" class="neontext">Blue Team</span>
-    <p style="font-size: 24pt;text-align: center;animation: flicker 1s infinite alternate;" class="neontext">- the game -</p>
+    <p style="font-size: 24pt;text-align: center;animation: flicker 1s infinite alternate;" class="neontext">- the game
+      -</p>
     <br>
     <div class="inputs">
       <label for="name">Name:</label>
@@ -73,32 +92,32 @@
     socket.emit('ready', req)
   }
 
-  socket.on('success', function(data) {
+  socket.on('success', function (data) {
     document.getElementById('roomCode').value = data
   })
 
-  socket.on('error', function(data) {
+  socket.on('error', function (data) {
     console.log(data)
   })
 
-  socket.on('players', function(data) {
+  socket.on('players', function (data) {
     // Update roles that user can pick
-    if(data.some((player) => player.build === 'Scout')) {
+    if (data.some((player) => player.build === 'Scout')) {
       document.getElementById('scout').style.display = 'none'
     } else {
       document.getElementById('scout').style.display = 'inline'
     }
-    if(data.some((player) => player.build === 'Antivirus')) {
+    if (data.some((player) => player.build === 'Antivirus')) {
       document.getElementById('antivirus').style.display = 'none'
     } else {
       document.getElementById('antivirus').style.display = 'inline'
     }
-    if(data.some((player) => player.build === 'Firewall')) {
+    if (data.some((player) => player.build === 'Firewall')) {
       document.getElementById('firewall').style.display = 'none'
     } else {
       document.getElementById('firewall').style.display = 'inline'
     }
-    
+
     // Update player list
     var playerListElement = document.getElementById('playerList');
     playerListElement.innerHTML = ''; // Clear existing list
@@ -111,23 +130,23 @@
     const readyMessage = document.getElementById('readiness')
     readyMessage.innerText = data.filter((player) => player.ready === true).length + '/' + data.length + ' players ready'
     if (data.length < 3) {
-      readyMessage.innerText += ` Still need ${3-data.length} more player`
-      if (3-data.length > 1) {
+      readyMessage.innerText += ` Still need ${3 - data.length} more player`
+      if (3 - data.length > 1) {
         readyMessage.innerText += 's'
       }
     }
   })
 
-  socket.on('ready', function(ready) {
+  socket.on('ready', function (ready) {
     // Updates readiness
-      if (ready) {
-        document.getElementById('ready').innerText = 'Cancel'
-        return
-      }
-      document.getElementById('ready').innerText = 'Ready'
+    if (ready) {
+      document.getElementById('ready').innerText = 'Cancel'
+      return
+    }
+    document.getElementById('ready').innerText = 'Ready'
   })
 
-  socket.on('startAllowed', function(id) {
+  socket.on('startAllowed', function (id) {
     if (id === document.getElementById('id').value) {
       document.getElementById('start').style.display = 'inline'
     }
@@ -136,11 +155,11 @@
     }
   })
 
-  socket.on('build', function(build) {
+  socket.on('build', function (build) {
     document.getElementById('build').innerText = 'Class: ' + build
   })
 
-  socket.on('id', function(id) {
+  socket.on('id', function (id) {
     document.getElementById('id').value = id
   })
 </script>
