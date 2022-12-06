@@ -1,7 +1,38 @@
 import type { Socket } from 'socket.io'
 
+import { actions, games } from '../lib/db'
+
+import { playerAction } from '../lib/logic'
+
 export default (socket: Socket) => {
-  socket.on('start', (data) => {
-    console.log(data)
+  socket.on('start', (roomCode) => {
+    handleStart(socket, roomCode)
   })
+
+  socket.on('action', (roomCode, action, fileID) => {
+    handleAction(socket, roomCode, action, fileID)
+  })
+}
+
+function handleStart(socket: Socket, roomCode: string) {
+  socket.emit('start', 'start')
+  socket.to(roomCode).emit('start', 'start')
+}
+
+function handleAction(socket: Socket, roomCode: string, action: string, fileID: number) {
+  // Make sure the player can do this action based on their class
+  const game = games.find((game) => game.code === roomCode)
+  if (game) {
+    const player = game.players.find((player) => player.id === socket.id)
+    if (player) {
+      if (!actions[player.class].includes(action)) {
+        // Prevent the player from performing the action
+        socket.emit('error', `${player.class} can't use ${action}`)
+      }
+
+      // Find the file listed in fileID if it exists
+      const file = game.files.find((file) => file.id === fileID)
+      playerAction(socket, game, player, action, file)
+    }
+  }
 }
