@@ -31,32 +31,32 @@
     <p style="font-size: 24pt;text-align: center;animation: flicker 1s infinite alternate;" class="neontext">- the game
       -</p>
     <br>
+    <p id="error"></p>
     <div class="inputs">
-      <label for="name">Name:</label>
-      <input id="name"></input>
+      <label for="playerName">Name:</label>
+      <input id="playerName"></input>
       <label for="roomCode">Code:</label>
       <input id="roomCode"></input>
     </div>
     <button onclick="host()">Host</button>
     <button onclick="join()">Join</button>
     <br>
-    <button id="scout" onclick="build('Scout')">Scout</button>
-    <button id="antivirus" onclick="build('Antivirus')">Antivirus</button>
-    <button id="firewall" onclick="build('Firewall')">Firewall</button>
+    <button id="scout" onclick="classChange('Scout')">Scout</button>
+    <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
+    <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
     <br>
     <button id="ready" onclick="ready()">Ready</button>
     <br>
     <label for="playerList">Players:</label>
     <ul id="playerList">
     </ul>
-    <p id="build">Class: </p>
+    <label for="playerClass">Class: </label>
+    <p id="playerClass"></p>
     <br>
     <p id="readiness"></p>
     <br>
     <button id="start" style="display: none">Start</button>
   </div>
-
-  <input style="display:none" id="id"></input> <!-- Will be moved to game page -->
 </body>
 
 </html>
@@ -64,77 +64,31 @@
 <script>
   const socket = io();
   function host() {
-    socket.emit('host', document.getElementById('name').value)
+    socket.emit('host', document.getElementById('playerName').value)
   }
 
   function join() {
-    var req = {
-      name: document.getElementById('name').value,
-      code: document.getElementById('roomCode').value
-    }
-    socket.emit('join', req)
+    socket.emit('join', document.getElementById('roomCode').value, document.getElementById('playerName').value)
   }
 
-  function build(build) {
-    var req = {
-      id: document.getElementById('id').value,
-      code: document.getElementById('roomCode').value,
-      build: build
-    }
-    socket.emit('build', req)
+  function classChange(playerClass) {
+    socket.emit('class', document.getElementById('roomCode').value, playerClass)
   }
 
   function ready() {
-    var req = {
-      id: document.getElementById('id').value,
-      code: document.getElementById('roomCode').value
-    }
-    socket.emit('ready', req)
+    socket.emit('ready', document.getElementById('roomCode').value)
   }
 
-  socket.on('success', function (data) {
-    document.getElementById('roomCode').value = data
+  socket.on('code', function (roomCode) {
+    document.getElementById('roomCode').value = roomCode
   })
 
-  socket.on('error', function (data) {
-    console.log(data)
+  socket.on('class', function (playerClass) {
+    document.getElementById('playerClass').innerText = playerClass
   })
 
-  socket.on('players', function (data) {
-    // Update roles that user can pick
-    if (data.some((player) => player.build === 'Scout')) {
-      document.getElementById('scout').style.display = 'none'
-    } else {
-      document.getElementById('scout').style.display = 'inline'
-    }
-    if (data.some((player) => player.build === 'Antivirus')) {
-      document.getElementById('antivirus').style.display = 'none'
-    } else {
-      document.getElementById('antivirus').style.display = 'inline'
-    }
-    if (data.some((player) => player.build === 'Firewall')) {
-      document.getElementById('firewall').style.display = 'none'
-    } else {
-      document.getElementById('firewall').style.display = 'inline'
-    }
-
-    // Update player list
-    var playerListElement = document.getElementById('playerList');
-    playerListElement.innerHTML = ''; // Clear existing list
-    for (var i = 0; i < data.length; i++) {
-      var player = data[i];
-      playerListElement.innerHTML += '<li>' + player.name + '</li>';
-    }
-
-    // Update readiness of players
-    const readyMessage = document.getElementById('readiness')
-    readyMessage.innerText = data.filter((player) => player.ready === true).length + '/' + data.length + ' players ready'
-    if (data.length < 3) {
-      readyMessage.innerText += ` Still need ${3 - data.length} more player`
-      if (3 - data.length > 1) {
-        readyMessage.innerText += 's'
-      }
-    }
+  socket.on('error', function (error) {
+    document.getElementById('error').innerHTML = error
   })
 
   socket.on('ready', function (ready) {
@@ -147,7 +101,7 @@
   })
 
   socket.on('startAllowed', function (id) {
-    if (id === document.getElementById('id').value) {
+    if (id === socket.id) {
       document.getElementById('start').style.display = 'inline'
     }
     else {
@@ -155,11 +109,41 @@
     }
   })
 
-  socket.on('build', function (build) {
-    document.getElementById('build').innerText = 'Class: ' + build
-  })
+  socket.on('players', function (playerData) {
+    //Reset Error
+    document.getElementById('error').innerHTML = ''
 
-  socket.on('id', function (id) {
-    document.getElementById('id').value = id
+    // Update roles that user can pick
+    if (playerData.some((player) => player.class === 'Scout')) {
+      document.getElementById('scout').style.display = 'none'
+    } else {
+      document.getElementById('scout').style.display = 'inline'
+    }
+    if (playerData.some((player) => player.class === 'Antivirus')) {
+      document.getElementById('antivirus').style.display = 'none'
+    } else {
+      document.getElementById('antivirus').style.display = 'inline'
+    }
+    if (playerData.some((player) => player.class === 'Firewall')) {
+      document.getElementById('firewall').style.display = 'none'
+    } else {
+      document.getElementById('firewall').style.display = 'inline'
+    }
+
+    // Update player list
+    document.getElementById('playerList').innerHTML = ''; // Clear existing list
+    for (var i = 0; i < data.length; i++) {
+      var player = playerData[i];
+      document.getElementById('playerList').innerHTML += '<li>' + player.name + '</li>';
+    }
+
+    // Update readiness of players
+    document.getElementById('readiness').innerText = data.filter((player) => player.ready === true).length + '/' + data.length + ' players ready'
+    if (data.length < 3) {
+      document.getElementById('readiness').innerText += ` Still need ${3 - data.length} more player`
+      if (3 - data.length > 1) {
+        document.getElementById('readiness').innerText += 's'
+      }
+    }
   })
 </script>

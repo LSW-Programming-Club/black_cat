@@ -4,20 +4,18 @@ import { games } from './db'
 
 export class Player {
   id: string
-  host: boolean
   ready: boolean
   turnOrder: number
   actions: number
-  build: string
+  class: string
   name: string
 
   constructor(name: string, id: string) {
     this.id = id
-    this.host = false
     this.ready = false
     this.turnOrder = 0
     this.actions = 2
-    this.build = ''
+    this.class = ''
     this.name = name
   }
 }
@@ -42,6 +40,7 @@ export class File {
 
 export class Game {
   code: string
+  host: string
   round: number
   hp: number
   files: File[]
@@ -49,6 +48,7 @@ export class Game {
 
   constructor(player: Player) {
     this.code = this.createCode()
+    this.host = player.id
     this.round = 0
     this.hp = 10
     this.files = [new File(1), new File(2), new File(3)]
@@ -70,6 +70,6 @@ export class Game {
   }
 
   playerList() {
-    return this.players.map((player) => ({ name: player.name, build: player.build, ready: player.ready }))
+    return this.players.map((player) => ({ name: player.name, class: player.class, ready: player.ready }))
   }
 }
