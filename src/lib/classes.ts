@@ -31,8 +31,8 @@ export class File {
     this.goodData = randomInt(1, 3)
     this.badData = randomInt(1, 3)
     this.size = this.goodData + this.badData
-    this.x = 0
-    this.y = 0
+    this.x = 1
+    this.y = 1
   }
 
   xToString(x: number) {
@@ -78,6 +78,32 @@ export class Game {
   }
 
   fileList() {
-    return this.detectedFiles.map((file) => ({ id: file.id, x: file.xToString(file.x), y: file.y, goodData: file.goodData, badData: file.badData }))
+    const fileList = []
+    // Push the detected files so far
+    const detectedFiles = this.detectedFiles.map((file) => ({
+      id: file.id,
+      x: file.xToString(file.x),
+      y: file.y,
+      goodData: file.goodData,
+      badData: file.badData
+    }))
+    fileList.push(...detectedFiles)
+
+    // Push the unknown files
+    const unknownFiles = this.files
+      .filter((file) => {
+        // Return true if the file is not in the detectedFiles list
+        return !this.detectedFiles.some((detectedFile) => detectedFile.id === file.id)
+      })
+      .map((file) => ({
+        id: file.id,
+        x: file.xToString(file.x),
+        y: file.y,
+        goodData: '?',
+        badData: '?'
+      }))
+    fileList.push(...unknownFiles)
+
+    return fileList
   }
 }

@@ -16,8 +16,23 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
         break
       case 'disinfect':
         handleDisinfect(socket, game, file, player)
+        break
+      case 'purge':
+        handlePurge(socket, game, file, player)
+        break
     }
+  } else if (action === 'move') {
+    handleMove(socket, game, player)
   }
+}
+
+function handleMove(socket: Socket, game: Game, player: Player) {
+  let steps = 1
+  if (player.class === 'Scout') {
+    steps = 2
+  }
+  socket.emit('success', `You may move ${steps} steps now`)
+  socket.to(game.code).emit('success', `${player.name} has taken a move`)
 }
 
 function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
@@ -29,6 +44,8 @@ function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
     player.actions++
   } else {
     game.detectedFiles.push(...chainFiles)
+    socket.emit('success', `Successfully scanned ${chainFiles.length} files!`)
+    socket.to(game.code).emit('success', `${player.name} successfully scanned ${chainFiles.length} files!`)
     socket.emit('file', game.fileList())
     socket.to(game.code).emit('file', game.fileList())
   }
@@ -36,7 +53,6 @@ function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
 
 function handleDisinfect(socket: Socket, game: Game, file: File, player: Player) {
   let removeMB = 1
-  console.log(file.badData)
   if (file.badData < 1) {
     socket.emit('error', 'This file is already clean. Try another')
     // Refund player's action
@@ -48,11 +64,29 @@ function handleDisinfect(socket: Socket, game: Game, file: File, player: Player)
   file.badData = file.badData - removeMB
   if (file.badData === 0) {
     socket.emit('success', `Virus has been eradicated from file ${file.id}`)
+    socket.to(game.code).emit('success', `${player.name} has eradicated all virus files from file ${file.id}`)
   } else {
-    socket.emit('success', `Some virus files have been removed ${file.badData}MB of bad data remaining in file ${file.id}`)
+    socket.emit('success', `Some virus files have been removed. ${file.badData}MB of bad data remaining in file ${file.id}`)
+    socket.to(game.code).emit('success', `${player.name} has removed ${file.badData}MB of bad data remaining in file ${file.id}`)
   }
   socket.emit('file', game.fileList())
   socket.to(game.code).emit('file', game.fileList())
+}
+
+function handlePurge(socket: Socket, game: Game, purgedFile: File, player: Player) {
+  // Remove the file from the records
+  if (purgedFile) {
+    game.files = game.files.filter((file) => file.id != purgedFile.id)
+    game.detectedFiles = game.detectedFiles.filter((file) => file.id != purgedFile.id)
+    socket.emit('success', `Purged file ${purgedFile.id}. Remove it from the game board`)
+    socket.to(game.code).emit('success', ` ${player.name} purged file ${purgedFile.id}. Remove it from the game board`)
+    socket.emit('file', game.fileList())
+    socket.to(game.code).emit('file', game.fileList())
+  } else {
+    socket.emit('error', `Can't purge requested file because it is already gone`)
+    // Refund player's action
+    player.actions++
+  }
 }
 
 function findChainOfFiles(game: Game, file: File): File[] {

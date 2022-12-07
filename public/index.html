@@ -66,7 +66,6 @@
     <button id="detect" onclick="action('detect')">Detect</button>
     <button id="disinfect" onclick="action('disinfect')">Disinfect</button>
     <button id="purge" onclick="action('purge')">Purge</button>
-    <button id="smash" onclick="action('smash')">Smash</button>
     <ol id="files">
     </ol>
   </div>
@@ -81,7 +80,24 @@
     socket.emit('start', document.getElementById('roomCode').value)
   }
   function action(action) {
-    socket.emit('action', document.getElementById('roomCode').value, action, 1)
+    if (action === 'move') {
+      socket.emit('action', document.getElementById('roomCode').value, action, -1)
+    } else {
+      // Get a reference to all elements with the class "files"
+      var files = document.getElementsByClassName('files');
+
+      // Loop through the elements and add an event listener to each one
+      for (var i = 0; i < files.length; i++) {
+        files[i].addEventListener('click', (e) => {
+          // When the event is triggered, retrieve the value of the element and send it as the file ID
+          socket.emit('action', document.getElementById('roomCode').value, action, e.target.id)
+          // Loop through the elements again and remove the event listener from each one
+          for (var j = 0; j < files.length; j++) {
+            files[j].removeEventListener('click', this);
+          }
+        });
+      }
+    }
   }
 
   socket.on('file', function (files) {
@@ -91,12 +107,12 @@
     for (var i = 0; i < files.length; i++) {
       var file = files[i];
       document.getElementById('files').innerHTML +=
-        `<ul>
-      <li> File: ${file.id} </li>
-      <li> X: ${file.x} </li>
-      <li> Y: ${file.y} </li>
-      <li> Good Data: ${file.goodData} </li>
-      <li> Bad Data: ${file.badData} </li>
+        `<ul class="files" id=${file.id}>
+      <li id=${file.id}> File: ${file.id} </li>
+      <li id=${file.id}> X: ${file.x} </li>
+      <li id=${file.id}> Y: ${file.y} </li>
+      <li id=${file.id}> Good Data: ${file.goodData} </li>
+      <li id=${file.id}> Bad Data: ${file.badData} </li>
       </ul>`
         ;
     }
