@@ -15,8 +15,13 @@ export default (socket: Socket) => {
 }
 
 function handleStart(socket: Socket, roomCode: string) {
-  socket.emit('start', 'start')
-  socket.to(roomCode).emit('start', 'start')
+  const game = games.find((game) => game.code === roomCode)
+  if (game && socket.id === game.host) {
+    socket.emit('start', 'start')
+    socket.to(roomCode).emit('start', 'start')
+  } else {
+    socket.emit('error', 'Only the host can start the game')
+  }
 }
 
 function handleAction(socket: Socket, roomCode: string, action: string, fileID: number) {
@@ -28,6 +33,7 @@ function handleAction(socket: Socket, roomCode: string, action: string, fileID: 
       if (!actions[player.class].includes(action)) {
         // Prevent the player from performing the action
         socket.emit('error', `${player.class} can't use ${action}`)
+        return
       }
 
       // Find the file listed in fileID if it exists

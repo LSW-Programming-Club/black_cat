@@ -59,8 +59,16 @@
     <button id="start" style="display: none" onclick="start()">Start</button>
   </div>
   <div id="game">
+    <p id="status"></p>
+    <label for="playerGameClass">Class: </label>
+    <p id="playerGameClass"></p>
     <button id="move" onclick="action('move')">Move</button>
     <button id="detect" onclick="action('detect')">Detect</button>
+    <button id="disinfect" onclick="action('disinfect')">Disinfect</button>
+    <button id="purge" onclick="action('purge')">Purge</button>
+    <button id="smash" onclick="action('smash')">Smash</button>
+    <ol id="files">
+    </ol>
   </div>
 </body>
 
@@ -77,7 +85,21 @@
   }
 
   socket.on('file', function (files) {
-    console.log(files)
+    // Wipe previous file info
+    document.getElementById('files').innerHTML = ''
+    // Fill with every file
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      document.getElementById('files').innerHTML +=
+        `<ul>
+      <li> File: ${file.id} </li>
+      <li> X: ${file.x} </li>
+      <li> Y: ${file.y} </li>
+      <li> Good Data: ${file.goodData} </li>
+      <li> Bad Data: ${file.badData} </li>
+      </ul>`
+        ;
+    }
   })
 
   socket.on('start', function (start) {
@@ -106,10 +128,16 @@
 
   socket.on('class', function (playerClass) {
     document.getElementById('playerClass').innerText = playerClass
+    document.getElementById('playerGameClass').innerText = playerClass
   })
 
   socket.on('error', function (error) {
     document.getElementById('error').innerHTML = error
+    document.getElementById('status').innerHTML = error
+  })
+
+  socket.on('success', function (message) {
+    document.getElementById('status').innerHTML = message
   })
 
   socket.on('ready', function (ready) {

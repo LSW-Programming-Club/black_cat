@@ -29,10 +29,10 @@ export class File {
   constructor(id: number) {
     this.id = id
     this.goodData = randomInt(1, 3)
-    this.badData = randomInt(0, 3)
+    this.badData = randomInt(1, 3)
     this.size = this.goodData + this.badData
-    this.x = 1
-    this.y = 1
+    this.x = 0
+    this.y = 0
   }
 
   xToString(x: number) {
@@ -46,6 +46,7 @@ export class Game {
   public round: number
   public hp: number
   public files: File[]
+  public detectedFiles: File[]
   public players: Player[]
 
   constructor(player: Player) {
@@ -54,6 +55,7 @@ export class Game {
     this.round = 0
     this.hp = 10
     this.files = [new File(1), new File(2), new File(3), new File(4), new File(5)]
+    this.detectedFiles = []
     this.players = [player]
   }
 
@@ -73,5 +75,9 @@ export class Game {
 
   playerList() {
     return this.players.map((player) => ({ name: player.name, class: player.class, ready: player.ready }))
+  }
+
+  fileList() {
+    return this.detectedFiles.map((file) => ({ id: file.id, x: file.xToString(file.x), y: file.y, goodData: file.goodData, badData: file.badData }))
   }
 }

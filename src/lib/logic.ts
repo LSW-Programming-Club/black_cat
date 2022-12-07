@@ -12,21 +12,47 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
   if (file) {
     switch (action) {
       case 'detect':
-        handleDetect(socket, game, file)
+        handleDetect(socket, game, file, player)
         break
       case 'disinfect':
-        handleDisinfect(socket, game, file)
+        handleDisinfect(socket, game, file, player)
     }
   }
 }
 
-function handleDetect(socket: Socket, game: Game, file: File) {
+function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
   // Tell the user about the file
-  socket.emit('file', findChainOfFiles(game, file))
+  const chainFiles = findChainOfFiles(game, file)
+  if (chainFiles.length === 0) {
+    socket.emit('error', 'This file and files in the chain are already scanned. Try another')
+    // Refund player's action
+    player.actions++
+  } else {
+    game.detectedFiles.push(...chainFiles)
+    socket.emit('file', game.fileList())
+    socket.to(game.code).emit('file', game.fileList())
+  }
 }
 
-function handleDisinfect(socket: Socket, game: Game, file: File) {
-  console.log(socket, game, file)
+function handleDisinfect(socket: Socket, game: Game, file: File, player: Player) {
+  let removeMB = 1
+  console.log(file.badData)
+  if (file.badData < 1) {
+    socket.emit('error', 'This file is already clean. Try another')
+    // Refund player's action
+    player.actions++
+    return
+  } else if (file.badData > 1) {
+    removeMB = 2
+  }
+  file.badData = file.badData - removeMB
+  if (file.badData === 0) {
+    socket.emit('success', `Virus has been eradicated from file ${file.id}`)
+  } else {
+    socket.emit('success', `Some virus files have been removed ${file.badData}MB of bad data remaining in file ${file.id}`)
+  }
+  socket.emit('file', game.fileList())
+  socket.to(game.code).emit('file', game.fileList())
 }
 
 function findChainOfFiles(game: Game, file: File): File[] {
@@ -37,7 +63,7 @@ function findChainOfFiles(game: Game, file: File): File[] {
     // Iterate over the game's files
     for (const gameFile of game.files) {
       // Make sure that the proposed file isn't already in the list
-      if (!chainFiles.includes(gameFile)) {
+      if (!chainFiles.includes(gameFile) && !game.detectedFiles.includes(gameFile)) {
         // Check if the is one square away horizontally and zero vertically and vice versa
         const xDiff = Math.abs(gameFile.x - chainFiles[i].x)
         const yDiff = Math.abs(gameFile.y - chainFiles[i].y)
@@ -47,6 +73,10 @@ function findChainOfFiles(game: Game, file: File): File[] {
         }
       }
     }
+  }
+  // Make sure to not duplicate file if its already been detected
+  if (game.detectedFiles.includes(file)) {
+    chainFiles.shift()
   }
   return chainFiles
 }
