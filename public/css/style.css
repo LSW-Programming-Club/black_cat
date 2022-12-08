@@ -88,9 +88,19 @@ body,html {
   transition-duration: 0.2s;
 }
 
+.center .hostbutton {
+  background-color:#fab387;
+  color:#313244;
+}
+
+.center .joinbutton {
+  background-color:#a6e3a1;
+  color:#313244;
+}
+
 .center button:hover {
-  background-color: #b4befe!important;
-  color: #313244!important;
+  background-color: #b4befe;
+  color: #313244;
 }
 
 
