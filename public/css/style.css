@@ -16,6 +16,17 @@ html {
   font-family: 'Noto Sans', sans-serif;
 }
 
+#error {
+  position:absolute;
+  margin-top:-20px;
+  left:50%;
+  transform:translatex(-50%);
+  color:#f38ba8;
+  width: fit-content;
+}
+
+
+/* All of the below code is for the centering box */
 .center {
   margin: auto;
   max-width: 600px;
@@ -110,6 +121,43 @@ html {
   color: #cdd6f4;
 }
 
+/* Mobile CSS */
+@media(max-width: 600px) {
+  html, body{
+    background-color: #292c3c;
+  }
+
+  #error {
+    left: 0;
+    transform: none;
+    width: 100%;
+    text-align: center;
+    font-size: 11pt;
+  }
+
+  .center .title {
+    font-size: 37pt;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    left: 0;
+  }
+
+  .center .stats{
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
+  }
+}
+
+@media(max-height: 540px) {
+  .center .title {
+    position: relative;
+  }
+  .center .stats{
+    position: relative;
+  }
+}
 
 /* Animations */
 .blink {

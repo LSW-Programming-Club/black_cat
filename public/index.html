@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <meta name="msapplication-TileColor" content="#da532c" />
   <meta name="theme-color" content="#ffffff" />
@@ -27,17 +27,18 @@
 <body>
   <!-- Box shown when starting a new session -->
   <div id="centerbox" class="center">
-    <span class="title" style="color: #626262;">black<span
-        style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span
-          style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> cat<span
-          class="blink">_</span></span></span>
-    <p id="error"></p>
+    <span class="title" style="color: #626262;">black<span style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> cat<span class="blink">_</span></span></span>
     <div class="inputs">
       <label for="playerName">Player Name:</label>
-      <span><input id="playerName"></input></span>
+      <span><input id="playerName" placeholder="_"></input></span>
       <label for="roomCode">Game Code:</label>
-      <span><input id="roomCode"></input></span>
+      <span><input id="roomCode" placeholder="_"></input></span>
+      <script type="text/javascript">
+        document.getElementById("playerName").value = "";
+        document.getElementById("roomCode").value = "";
+      </script>
     </div>
+    <span id="error"></span>
     <div class="buttons">
       <div class="buttongroup" id="gamestart">
         <button class="hostbutton" onclick="host()">Host</button>
@@ -52,15 +53,16 @@
         <button id="ready" onclick="ready()">Ready</button>
       </div>
     </div>
-    <label for="playerList">Players:</label>
-    <ul id="playerList">
-    </ul>
-    <label for="playerClass">Your Class: </label>
-    <p id="playerClass"></p>
-    <br>
-    <p id="readiness"></p>
-    <br>
-    <button id="start" style="display: none" onclick="start()">Start</button>
+
+    <div class="stats">
+      <label for="playerList" style="display: none;">Players:</label>
+      <ul id="playerList" style="display: none;">
+      </ul>
+      <label for="playerClass" style="display: none;">Your Class: </label>
+      <p id="playerClass" style="display: none;"></p>
+      <p id="readiness" style="display: none;"></p>
+      <button id="start" style="display: none" onclick="start()">Start</button>
+    </div>
   </div>
 
   <!-- Box shown after the game has begun -->
@@ -79,6 +81,8 @@
 </body>
 
 </html>
+
+<!-- End of HTML, beginning of JS -->
 
 <script>
   const socket = io();
@@ -231,6 +235,7 @@
 
     // Update player list
     document.getElementById('playerList').innerHTML = ''; // Clear existing list
+    document.getElementById('playerList').style.display = 'block';
     for (var i = 0; i < playerData.length; i++) {
       var player = playerData[i];
       document.getElementById('playerList').innerHTML += '<li>' + player.name + '</li>';
