@@ -51,6 +51,7 @@ body,html {
   padding: 10px;
   border-radius: 5px;
   color: #cdd6f4;
+  width: 100%;
 }
 
 .center input:before {
