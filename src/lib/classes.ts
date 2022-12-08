@@ -31,8 +31,8 @@ export class File {
     this.goodData = randomInt(1, 3)
     this.badData = randomInt(1, 3)
     this.size = this.goodData + this.badData
-    this.x = 1
-    this.y = 1
+    this.x = 0
+    this.y = 0
   }
 
   xToString(x: number) {
@@ -41,6 +41,31 @@ export class File {
 
   xToNumber(x: string) {
     return Number(x.charCodeAt(0) - 64)
+  }
+
+  generateRandomXY(files: File[]) {
+    // Generate a random x and y for the board
+    const x = randomInt(1, 9)
+    const y = randomInt(1, 9)
+
+    // Check if the row and column indexes are outside of the cutout
+    // The cutout is a 5x5 square in the middle of the board, so we check if the
+    // row and column indexes are not between 2 and 6 (the indexes of the cutout)
+    if (x < 2 || x > 6 || y < 2 || y > 6) {
+      for (const gameFile of files) {
+        // If conflict with already existing game file than try again
+        if (gameFile.x === x && gameFile.y === y) {
+          this.generateRandomXY(files)
+          break
+        }
+      }
+      // If the indexes are outside of the cutout, return the value at that index
+      this.x = x
+      this.y = y
+    } else {
+      // If the indexes are inside the cutout, try again with a new random row and column
+      this.generateRandomXY(files)
+    }
   }
 }
 

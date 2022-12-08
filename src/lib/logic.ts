@@ -1,5 +1,5 @@
 import type { Socket } from 'socket.io'
-import { File, Game, Player } from './classes'
+import type { File, Game, Player } from './classes'
 
 export function playerAction(socket: Socket, game: Game, player: Player, action: string, file?: File) {
   if (player.actions < 1) {
@@ -21,23 +21,49 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
         handlePurge(socket, game, file, player)
         break
     }
-  } else if (action === 'move') {
-    handleMove(socket, game, player)
   }
 }
 
-export function playerSmash(socket: Socket, game: Game, player: Player, x: string, y: number) {
-  const playerPositionFile = new File(-1)
-  playerPositionFile.x = str.charCodeAt(0) - 64
-}
-
-function handleMove(socket: Socket, game: Game, player: Player) {
+export function playerMove(socket: Socket, game: Game, player: Player) {
+  // Make sure the player has actions remaining
+  if (player.actions < 1) {
+    socket.emit('error', `You can't move since you are out of actions`)
+    return
+  }
+  player.actions--
   let steps = 1
+  // If class is scout give an extra move
   if (player.class === 'Scout') {
     steps = 2
   }
   socket.emit('success', `You may move ${steps} steps now`)
   socket.to(game.code).emit('success', `${player.name} has taken a move`)
+}
+
+export function playerSmash(socket: Socket, game: Game, player: Player, stringX: string, playerY: number) {
+  // Declare required variables
+  const playerX = Number(stringX.charCodeAt(0) - 64)
+  const damagedFiles: File[] = []
+
+  // Loop through all DETECTED files to see if they are next to player
+  for (const gameFile of game.detectedFiles) {
+    const xDiff = Math.abs(gameFile.x - playerX)
+    const yDiff = Math.abs(gameFile.y - playerY)
+    if ((xDiff === 1 && yDiff === 0) || (xDiff === 0 && yDiff === 1)) {
+      // If so, add the file to the list of chained files
+      damagedFiles.push(gameFile)
+    }
+  }
+
+  if (damagedFiles.length > 0) {
+    //Reduce players actions by 1
+    player.actions--
+
+    socket.emit('success', `${damagedFiles.length} files have had 1MB of bad data removed`)
+    socket.to(game.code).emit('success', `${player.name} removed 1MB of bad data from ${damagedFiles.length} files`)
+  } else {
+    socket.emit('error', 'No files to smash. Try another action')
+  }
 }
 
 function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
@@ -106,7 +132,7 @@ export function findChainOfFiles(game: Game, file: File): File[] {
         // Check if the is one square away horizontally and zero vertically and vice versa
         const xDiff = Math.abs(gameFile.x - chainFiles[i].x)
         const yDiff = Math.abs(gameFile.y - chainFiles[i].y)
-        if ((xDiff === 1 && yDiff === 0) || (xDiff === 0 && yDiff)) {
+        if ((xDiff === 1 && yDiff === 0) || (xDiff === 0 && yDiff === 1)) {
           // If so, add the file to the list of chained files
           chainFiles.push(gameFile)
         }
@@ -114,7 +140,7 @@ export function findChainOfFiles(game: Game, file: File): File[] {
     }
   }
   // Make sure to not duplicate file if its already been detected
-  if (game.detectedFiles.includes(file) || file.id === -1) {
+  if (game.detectedFiles.includes(file)) {
     chainFiles.shift()
   }
   return chainFiles
