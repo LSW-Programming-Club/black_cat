@@ -17,11 +17,11 @@ html {
 }
 
 #error {
-  position:absolute;
-  margin-top:-20px;
-  left:50%;
-  transform:translatex(-50%);
-  color:#f38ba8;
+  position: absolute;
+  margin-top: -20px;
+  left: 50%;
+  transform: translatex(-50%);
+  color: #f38ba8;
   width: fit-content;
 }
 
@@ -82,7 +82,9 @@ html {
   margin-right: auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex-wrap: nowrap;
+  text-align: left;
   text-align: center;
 }
 
@@ -96,6 +98,7 @@ html {
   padding: 10px;
   margin: 5px;
   min-width: 75px;
+  width: fit-content;
   transition-property: background-color, color;
   transition-duration: 0.2s;
 }
@@ -132,7 +135,7 @@ html {
     transform: none;
     width: 100%;
     text-align: center;
-    font-size: 11pt;
+    font-size: 10pt;
   }
 
   .center .title {

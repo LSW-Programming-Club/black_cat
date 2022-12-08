@@ -27,7 +27,7 @@
 <body>
   <!-- Box shown when starting a new session -->
   <div id="centerbox" class="center">
-    <span class="title" style="color: #626262;">black<span style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> cat<span class="blink">_</span></span></span>
+    <span class="title" style="color: #626262;">black<span style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> <a style="color:#e5e5e5;text-decoration:none;" href="https://man7.org/linux/man-pages/man1/cat.1.html" target="_blank">cat</a><span class="blink">_</span></span></span>
     <div class="inputs">
       <label for="playerName">Player Name:</label>
       <span><input id="playerName" placeholder="_"></input></span>
@@ -44,7 +44,7 @@
         <button class="hostbutton" onclick="host()">Host</button>
         <button class="joinbutton" onclick="join()">Join</button>
       </div>
-      <div style="display: flex;justify-content: space-between;" id="classselect">
+      <div style="display:flex;justify-content:space-between;" id="classselect">
         <button id="scout" onclick="classChange('Scout')">Scout</button>
         <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
         <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="stats">
+    <div class="stats buttons">
       <label for="playerList" style="display: none;">Players:</label>
       <ul id="playerList" style="display: none;">
       </ul>
@@ -66,7 +66,7 @@
   </div>
 
   <!-- Box shown after the game has begun -->
-  <div id="game" style="display:none;">
+  <div id="game" class="center" style="display:none;">
     <p id="status"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
@@ -137,6 +137,7 @@
 
   socket.on('start', function (start) {
     document.getElementById('centerbox').style.display = 'none'
+    document.getElementById('game').style.display = 'block'
     switch (document.getElementById('playerClass').innerText) {
       case 'Scout':
         document.getElementById('detect').style.display = 'inline'
