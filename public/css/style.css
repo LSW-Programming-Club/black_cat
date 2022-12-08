@@ -1,80 +1,104 @@
 /*Import fonts*/
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz@8..144&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
 
 * {
   margin: 0;
   padding: 0;
 }
 
-body,
-html {
+body,html {
   height: 100%;
   display: grid;
   background-color: #1e1e2e;
   color: #cdd6f4;
-  font-family: 'Roboto Flex', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
-.neontext {
-  color: #fff;
-  text-shadow:
-    0 0 7px #cdd6f4,
-    0 0 10px #cdd6f4,
-    0 0 21px #cdd6f4,
-    0 0 42px #0fa,
-    0 0 82px #0fa,
-    0 0 92px #0fa,
-    0 0 102px #0fa,
-    0 0 151px #0fa;
-
-  animation: flicker 2s infinite alternate;
-}
-
-@keyframes flicker {
-  100% {
-    /* Larger blur radius */
-    text-shadow:
-      0 0 4px #cdd6f4,
-      0 0 11px #cdd6f4,
-      0 0 19px #cdd6f4,
-      0 0 40px #06f,
-      0 0 80px #06f,
-      0 0 90px #06f,
-      0 0 100px #06f,
-      0 0 150px #06f;
-  }
-
-  0% {
-    /* Smaller blur radius */
-    text-shadow:
-      0 0 2px #cdd6f4,
-      0 0 4px #cdd6f4,
-      0 0 6px #cdd6f4,
-      0 0 10px #06f,
-      0 0 45px #06f,
-      0 0 55px #06f,
-      0 0 70px #06f,
-      0 0 80px #06f;
-  }
-}
-
-#centerbox {
+.center {
   margin: auto;
-  max-width: 500px;
+  max-width: 600px;
   border-radius: 5px;
   background-color: #292c3c;
   padding: 10px;
 }
 
-#centerbox .logo {
+.center .title {
+  font-size: 50pt;
+  text-align: center;
+}
+
+.center .logo {
   max-width: 300px;
   margin-bottom: 20px;
 }
 
-#centerbox .inputs {
+.center .inputs {
   display: flex;
   flex-direction: column;
   padding: 2px;
   font-size: 15pt;
   margin-bottom: 20px;
+  width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center input {
+  font-size: 12pt;
+  background-color: #45475a;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  color: #cdd6f4;
+}
+
+.center input:before {
+  content: ": ";
+  position: relative;
+  display: block;
+  z-index: 5;
+}
+
+.center .buttons {
+  padding: 2px;
+  font-size: 15pt;
+  margin-bottom: 20px;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  text-align: center;
+}
+
+.center button {
+  text-align: center;
+  background-color: #585b70;
+  color: #cdd6f4;
+  font-size: 13pt;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  min-width: 75px;
+  transition-property: background-color, color;
+  transition-duration: 0.2s;
+}
+
+.center button:hover {
+  background-color: #b4befe!important;
+  color: #313244!important;
+}
+
+
+/* Animations */
+.blink {
+  animation: blink-animation 1s steps(2, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
 }

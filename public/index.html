@@ -25,47 +25,50 @@
 </head>
 
 <body>
-  <div id="centerbox">
-    <span style="font-size: 60pt;" class="neontext">Blue Team</span>
-    <p style="font-size: 24pt;text-align: center;animation: flicker 1s infinite alternate;" class="neontext">- the
-      game
-      -</p>
-    <br>
-    <p id="error"></p>
+  <!-- Box shown when starting a new session -->
+  <div id="centerbox" class="center">
+    <span class="title" style="color: #626262;">black<span style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> cat<span class="blink">_</span></span></span>
     <div class="inputs">
-      <label for="playerName">Name:</label>
-      <input id="playerName"></input>
-      <label for="roomCode">Code:</label>
-      <input id="roomCode"></input>
+      <label for="playerName">Player Name:</label>
+      <span><input id="playerName"></input></span>
+      <label for="roomCode">Game Code:</label>
+      <span><input id="roomCode"></input></span>
     </div>
-    <button onclick="host()">Host</button>
-    <button onclick="join()">Join</button>
-    <br>
-    <button id="scout" onclick="classChange('Scout')">Scout</button>
-    <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
-    <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
-    <br>
-    <button id="ready" onclick="ready()">Ready</button>
-    <br>
+    <div class="buttons">
+      <div class="buttongroup" id="gamestart">
+        <button style="background-color:#fab387;color:#313244;" onclick="host()">Host</button>
+        <button style="background-color:#a6e3a1;color:#313244;" onclick="join()">Join</button>
+      </div>
+      <div style="display: flex;justify-content: space-between;" id="classselect">
+        <button id="scout" onclick="classChange('Scout')">Scout</button>
+        <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
+        <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
+      </div>
+      <div class="buttongroup" id="readyup">
+        <button id="ready" onclick="ready()">Ready</button>
+      </div>
+    </div>
     <label for="playerList">Players:</label>
     <ul id="playerList">
     </ul>
-    <label for="playerClass">Class: </label>
+    <label for="playerClass">Your Class: </label>
     <p id="playerClass"></p>
     <br>
     <p id="readiness"></p>
     <br>
     <button id="start" style="display: none" onclick="start()">Start</button>
   </div>
-  <div id="game">
+
+  <!-- Box shown after the game has begun -->
+  <div id="game" style="display:none;">
     <p id="status"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
-    <button id="move" onclick="move()">Move</button>
-    <button id="detect" onclick="action('detect')">Detect</button>
-    <button id="disinfect" onclick="action('disinfect')">Disinfect</button>
-    <button id="purge" onclick="action('purge')">Purge</button>
-    <button id="smash" onclick="smash()">Smash</button>
+    <button style="display:none;" id="move" onclick="move()">Move</button>
+    <button style="display:none;" id="detect" onclick="action('detect')">Detect</button>
+    <button style="display:none;" id="disinfect" onclick="action('disinfect')">Disinfect</button>
+    <button style="display:none;" id="purge" onclick="action('purge')">Purge</button>
+    <button style="display:none;" id="smash" onclick="smash()">Smash</button>
     <ol id="files">
     </ol>
   </div>
@@ -126,6 +129,18 @@
 
   socket.on('start', function (start) {
     document.getElementById('centerbox').style.display = 'none'
+    switch (document.getElementById('playerClass').innerText) {
+      case 'Scout':
+        document.getElementById('detect').style.display = 'inline'
+        break
+      case 'Antivirus':
+        document.getElementById('disinfect').style.display = 'inline'
+        break
+      case 'Firewall':
+        document.getElementById('purge').style.display = 'inline'
+        document.getElementById('smash').style.display = 'inline'
+        break
+    }
   })
 
   function host() {
