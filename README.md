@@ -17,6 +17,7 @@ Files strewn across the board which may or may not contain a virus. The players 
 ### Game
 
 - [ ] Finish rules
+- [ ] Play the game
 
 ### Backend
 
@@ -24,4 +25,7 @@ Files strewn across the board which may or may not contain a virus. The players 
 
 ### Frontend
 
-- [ ] Setup CSS
+- [x] Setup CSS
+- [ ] Finish main menu
+- [ ] Finish gameplay menu
+- [ ] Finalize
