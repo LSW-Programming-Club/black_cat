@@ -27,7 +27,11 @@
 <body>
   <!-- Box shown when starting a new session -->
   <div id="centerbox" class="center">
-    <span class="title" style="color: #626262;">black<span style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> cat<span class="blink">_</span></span></span>
+    <span class="title" style="color: #626262;">black<span
+        style="color: #e5e5e5; font-weight: normal; font-family: 'Noto Sans Mono', monospace;"><span
+          style="color: #74c7ec">~</span><span style="color: #a6e3a1">$</span> cat<span
+          class="blink">_</span></span></span>
+    <p id="error"></p>
     <div class="inputs">
       <label for="playerName">Player Name:</label>
       <span><input id="playerName"></input></span>
@@ -36,8 +40,8 @@
     </div>
     <div class="buttons">
       <div class="buttongroup" id="gamestart">
-        <button style="background-color:#fab387;color:#313244;" onclick="host()">Host</button>
-        <button style="background-color:#a6e3a1;color:#313244;" onclick="join()">Join</button>
+        <button class="hostbutton" onclick="host()">Host</button>
+        <button class="joinbutton" onclick="join()">Join</button>
       </div>
       <div style="display: flex;justify-content: space-between;" id="classselect">
         <button id="scout" onclick="classChange('Scout')">Scout</button>
@@ -201,19 +205,28 @@
 
     // Update roles that user can pick
     if (playerData.some((player) => player.class === 'Scout')) {
-      document.getElementById('scout').style.display = 'none'
+      document.getElementById('scout').classList.add('greyedout')
     } else {
-      document.getElementById('scout').style.display = 'inline'
+      document.getElementById('scout').classList.remove('greyedout')
     }
     if (playerData.some((player) => player.class === 'Antivirus')) {
-      document.getElementById('antivirus').style.display = 'none'
+      document.getElementById('antivirus').classList.add('greyedout')
     } else {
-      document.getElementById('antivirus').style.display = 'inline'
+      document.getElementById('antivirus').classList.remove('greyedout')
     }
     if (playerData.some((player) => player.class === 'Firewall')) {
-      document.getElementById('firewall').style.display = 'none'
+      document.getElementById('firewall').classList.add('greyedout')
     } else {
-      document.getElementById('firewall').style.display = 'inline'
+      document.getElementById('firewall').classList.remove('greyedout')
+    }
+
+    document.getElementById('scout').classList.remove('chosenClass')
+    document.getElementById('antivirus').classList.remove('chosenClass')
+    document.getElementById('firewall').classList.remove('chosenClass')
+
+    if (document.getElementById('playerClass').innerText != '') {
+      document.getElementById(document.getElementById('playerClass').innerText.toLowerCase()).classList.remove('greyedout')
+      document.getElementById(document.getElementById('playerClass').innerText.toLowerCase()).classList.add('chosenClass')
     }
 
     // Update player list

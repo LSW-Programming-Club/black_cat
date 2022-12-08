@@ -7,7 +7,8 @@
   padding: 0;
 }
 
-body,html {
+body,
+html {
   height: 100%;
   display: grid;
   background-color: #1e1e2e;
@@ -89,18 +90,24 @@ body,html {
 }
 
 .center .hostbutton {
-  background-color:#fab387;
-  color:#313244;
+  background-color: #fab387;
+  color: #313244;
 }
 
 .center .joinbutton {
-  background-color:#a6e3a1;
-  color:#313244;
+  background-color: #a6e3a1;
+  color: #313244;
 }
 
-.center button:hover {
+.center button:hover,
+.center button.chosenClass {
   background-color: #b4befe;
   color: #313244;
+}
+
+.center button.greyedout {
+  background-color: #666;
+  color: #cdd6f4;
 }
 
 
@@ -108,6 +115,7 @@ body,html {
 .blink {
   animation: blink-animation 1s steps(2, start) infinite;
 }
+
 @keyframes blink-animation {
   to {
     visibility: hidden;
