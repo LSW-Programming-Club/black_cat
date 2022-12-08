@@ -20,7 +20,7 @@
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
 
   <title>Blue Team</title>
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"
+  <script src="/js/socket.io.min.js"
     integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
     crossorigin="anonymous"></script>
 </head>
@@ -66,6 +66,7 @@
     <button id="detect" onclick="action('detect')">Detect</button>
     <button id="disinfect" onclick="action('disinfect')">Disinfect</button>
     <button id="purge" onclick="action('purge')">Purge</button>
+    <button id="smash" onclick="action('smash')">Smash</button>
     <ol id="files">
     </ol>
   </div>
@@ -82,7 +83,10 @@
   function action(action) {
     if (action === 'move') {
       socket.emit('action', document.getElementById('roomCode').value, action, -1)
-    } else {
+    } else if (action === 'smash') {
+      socket.emit('action', document.getElementById('roomCode').value, prompt("Player X Position", "A-J"), prompt("Player Y Position", "1-9"))
+    }
+    else {
       // Get a reference to all elements with the class "files"
       var files = document.getElementsByClassName('files');
 

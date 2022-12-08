@@ -38,6 +38,10 @@ export class File {
   xToString(x: number) {
     return String.fromCharCode(64 + x)
   }
+
+  xToNumber(x: string) {
+    return Number(x.charCodeAt(0) - 64)
+  }
 }
 
 export class Game {

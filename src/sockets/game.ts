@@ -2,7 +2,7 @@ import type { Socket } from 'socket.io'
 
 import { actions, games } from '../lib/db'
 
-import { playerAction } from '../lib/logic'
+import { playerAction, playerSmash } from '../lib/logic'
 
 export default (socket: Socket) => {
   socket.on('start', (roomCode) => {
@@ -41,6 +41,10 @@ function handleAction(socket: Socket, roomCode: string, action: string, fileID: 
         return
       }
 
+      // Check if the action is 'smash'
+      if (action.match('[A-F]')) {
+        playerSmash(socket, game, player, action, fileID)
+      }
       // Find the file listed in fileID if it exists
       const file = game.files.find((file) => file.id === Number(fileID))
       playerAction(socket, game, player, action, file)

@@ -1,5 +1,5 @@
 import type { Socket } from 'socket.io'
-import type { File, Game, Player } from './classes'
+import { File, Game, Player } from './classes'
 
 export function playerAction(socket: Socket, game: Game, player: Player, action: string, file?: File) {
   if (player.actions < 1) {
@@ -24,6 +24,11 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
   } else if (action === 'move') {
     handleMove(socket, game, player)
   }
+}
+
+export function playerSmash(socket: Socket, game: Game, player: Player, x: string, y: number) {
+  const playerPositionFile = new File(-1)
+  playerPositionFile.x = str.charCodeAt(0) - 64
 }
 
 function handleMove(socket: Socket, game: Game, player: Player) {
@@ -89,7 +94,7 @@ function handlePurge(socket: Socket, game: Game, purgedFile: File, player: Playe
   }
 }
 
-function findChainOfFiles(game: Game, file: File): File[] {
+export function findChainOfFiles(game: Game, file: File): File[] {
   const chainFiles: File[] = []
   chainFiles.push(file)
   // Iterate until all the files in a row have been found
@@ -109,7 +114,7 @@ function findChainOfFiles(game: Game, file: File): File[] {
     }
   }
   // Make sure to not duplicate file if its already been detected
-  if (game.detectedFiles.includes(file)) {
+  if (game.detectedFiles.includes(file) || file.id === -1) {
     chainFiles.shift()
   }
   return chainFiles
