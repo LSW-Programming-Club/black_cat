@@ -20,8 +20,7 @@
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
 
   <title>Blue Team</title>
-  <script src="/js/socket.io.min.js"
-    integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
+  <script src="/js/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI"
     crossorigin="anonymous"></script>
 </head>
 
@@ -62,11 +61,11 @@
     <p id="status"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
-    <button id="move" onclick="action('move')">Move</button>
+    <button id="move" onclick="move()">Move</button>
     <button id="detect" onclick="action('detect')">Detect</button>
     <button id="disinfect" onclick="action('disinfect')">Disinfect</button>
     <button id="purge" onclick="action('purge')">Purge</button>
-    <button id="smash" onclick="action('smash')">Smash</button>
+    <button id="smash" onclick="smash()">Smash</button>
     <ol id="files">
     </ol>
   </div>
@@ -80,28 +79,31 @@
   function start() {
     socket.emit('start', document.getElementById('roomCode').value)
   }
-  function action(action) {
-    if (action === 'move') {
-      socket.emit('action', document.getElementById('roomCode').value, action, -1)
-    } else if (action === 'smash') {
-      socket.emit('action', document.getElementById('roomCode').value, prompt("Player X Position", "A-J"), prompt("Player Y Position", "1-9"))
-    }
-    else {
-      // Get a reference to all elements with the class "files"
-      var files = document.getElementsByClassName('files');
 
-      // Loop through the elements and add an event listener to each one
-      for (var i = 0; i < files.length; i++) {
-        files[i].addEventListener('click', (e) => {
-          // When the event is triggered, retrieve the value of the element and send it as the file ID
-          socket.emit('action', document.getElementById('roomCode').value, action, e.target.id)
-          // Loop through the elements again and remove the event listener from each one
-          for (var j = 0; j < files.length; j++) {
-            files[j].removeEventListener('click', this);
-          }
-        });
-      }
+  function action(action) {
+    // Get a reference to all elements with the class "files"
+    var files = document.getElementsByClassName('files');
+
+    // Loop through the elements and add an event listener to each one
+    for (var i = 0; i < files.length; i++) {
+      files[i].addEventListener('click', (e) => {
+        // When the event is triggered, retrieve the value of the element and send it as the file ID
+        socket.emit('action', document.getElementById('roomCode').value, action, e.target.id)
+        // Loop through the elements again and remove the event listener from each one
+        for (var j = 0; j < files.length; j++) {
+          files[j].removeEventListener('click', this);
+        }
+      });
     }
+  }
+
+  function move() {
+    socket.emit('move', document.getElementById('roomCode').value)
+  }
+
+  function smash() {
+    //TODO: Implement checking the user input
+    socket.emit('smash', document.getElementById('roomCode').value, prompt("Player X Position", "A-J"), prompt("Player Y Position", "1-9"))
   }
 
   socket.on('file', function (files) {
