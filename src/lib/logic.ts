@@ -49,7 +49,6 @@ export function handleTurn(socket: Socket, game: Game, player: Player) {
       game.createFiles(1)
     }
 
-
     // Send updated files
     socket.emit('file', game.fileList())
     socket.to(game.code).emit('file', game.fileList())
@@ -57,10 +56,9 @@ export function handleTurn(socket: Socket, game: Game, player: Player) {
     socket.emit('success', `All players have used their actions. You are now on round ${game.round}`)
     socket.to(game.code).emit('success', `All players have used their actions. You are now on round ${game.round}`)
 
-    for (const p of game.players) {
-      game.resetPlayerActions()
-      socket.emit('actionAmount', p.actions)
-    }
+    game.resetPlayerActions()
+    socket.emit('actionAmount', 2)
+    socket.to(game.code).emit('actionAmount', 2)
   }
 }
 
@@ -98,7 +96,7 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
   }
 
   if (damagedFiles.length > 0) {
-    console.log("damaged file exists");
+    console.log('damaged file exists')
     //Reduce players actions by 1
     player.actions--
 

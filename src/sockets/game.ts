@@ -30,6 +30,7 @@ export function handleStart(socket: Socket, roomCode: string) {
     // HOTFIX FIX LATER
     const dummyPlayer = new Player('dummy', 'dummy')
     handleTurn(socket, game, dummyPlayer)
+    socket.to(roomCode).emit('actionAmount', 2)
     socket.emit('start', 'start')
     socket.to(roomCode).emit('start', 'start')
 
