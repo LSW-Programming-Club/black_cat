@@ -92,7 +92,8 @@
     <button id="godScout" onclick="classChange('Scout')">Scout</button>
     <button id="godAntivirus" onclick="classChange('Antivirus')">Antivirus</button>
     <button id="godFirewall" onclick="classChange('Firewall')">Firewall</button>
-    <button id="godActions" onclick="actionUp()">Add Action</button>
+    <button id="godActions" onclick="actionUp()">Action+</button>
+    <button id="godExit" onclick="location.reload()">Lobby</button>
   </div>
 </body>
 
@@ -167,14 +168,28 @@
     switch (document.getElementById('playerClass').innerText) {
       case 'Scout':
         document.getElementById('detect').style.display = 'inline'
-        //TODO: REMOVE AFTER DEBUG
+        break
+      case 'Antivirus':
+        document.getElementById('disinfect').style.display = 'inline'
+        break
+      case 'Firewall':
+        document.getElementById('purge').style.display = 'inline'
+        document.getElementById('smash').style.display = 'inline'
+        break
+    }
+  })
+
+  //TODO: REMOVE AFTER DEBUG
+  socket.on('godStart', function (start) {
+    switch (document.getElementById('playerClass').innerText) {
+      case 'Scout':
+        document.getElementById('detect').style.display = 'inline'
         document.getElementById('disinfect').style.display = 'none'
         document.getElementById('purge').style.display = 'none'
         document.getElementById('smash').style.display = 'none'
         break
       case 'Antivirus':
         document.getElementById('disinfect').style.display = 'inline'
-        //TODO: REMOVE AFTER DEBUG
         document.getElementById('detect').style.display = 'none'
         document.getElementById('purge').style.display = 'none'
         document.getElementById('smash').style.display = 'none'
@@ -182,7 +197,6 @@
       case 'Firewall':
         document.getElementById('purge').style.display = 'inline'
         document.getElementById('smash').style.display = 'inline'
-        //TODO: REMOVE AFTER DEBUG
         document.getElementById('detect').style.display = 'none'
         document.getElementById('disinfect').style.display = 'none'
         break

@@ -122,7 +122,7 @@ function handleClass(socket: Socket, roomCode: string, playerClass: string) {
   socket.emit('players', game.playerList())
 
   //TODO: REMOVE AFTER DEBUG
-  socket.emit('start', 'start')
+  socket.emit('godStart', 'start')
 }
 
 function handleReady(socket: Socket, roomCode: string) {
