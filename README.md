@@ -24,8 +24,13 @@ Files strewn across the board which may or may not contain a virus. The players 
 - [x] Setup DB
 - [x] Setup classes
 - [x] Implement class abilities
-- [ ] Implement turns
-- [ ] Implement computer/file interaction
+- [x] Implement turns
+- [x] Implement computer/file interaction
+- [x] "Success" needs to be rolling
+- [ ] Leaving player breaks things
+- [ ] No "scratch disk class"
+- [ ] Sort detected
+- [ ] Fix movement
 
 ### Frontend
 

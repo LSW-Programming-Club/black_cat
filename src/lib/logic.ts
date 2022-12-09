@@ -23,10 +23,15 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
     }
   }
 
-  handleTurn(socket, game)
+  handleTurn(socket, game, player)
 }
 
-function handleTurn(socket: Socket, game: Game) {
+function handleTurn(socket: Socket, game: Game, player: Player) {
+  // THIS CODE SHOULD NOT BE HERE. SHOULD RELOCATE WHEN HAVE TIME
+  socket.emit('hp', game.hp)
+  socket.to(game.code).emit('hp', game.hp)
+  socket.emit('actionAmount', player.actions)
+
   // If players have used all of their actions
   if (game.players.find((player) => player.actions > 0) === undefined) {
     // Iterate round count
@@ -68,7 +73,7 @@ export function playerMove(socket: Socket, game: Game, player: Player) {
   socket.emit('success', `You may move ${steps} steps now`)
   socket.to(game.code).emit('success', `${player.name} has taken a move`)
 
-  handleTurn(socket, game)
+  handleTurn(socket, game, player)
 }
 
 export function playerSmash(socket: Socket, game: Game, player: Player, stringX: string, playerY: number) {
@@ -90,13 +95,24 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
     //Reduce players actions by 1
     player.actions--
 
-    socket.emit('success', `${damagedFiles.length} files have had 1MB of bad data removed`)
-    socket.to(game.code).emit('success', `${player.name} removed 1MB of bad data from ${damagedFiles.length} files`)
+    // Damage files found
+    for (const damagedFile of damagedFiles) {
+      if (damagedFile.badData > 0) {
+        damagedFile.badData--
+      }
+    }
+
+    let plural = 's'
+    if (damagedFiles.length > 1) {
+      plural = ''
+    }
+    socket.emit('success', `${damagedFiles.length} file${plural} have had 1MB of bad data removed`)
+    socket.to(game.code).emit('success', `${player.name} removed 1MB of bad data from ${damagedFiles.length} file${plural}`)
   } else {
     socket.emit('error', 'No files to smash. Try another action')
   }
 
-  handleTurn(socket, game)
+  handleTurn(socket, game, player)
 }
 
 function handleDetect(socket: Socket, game: Game, file: File, player: Player) {

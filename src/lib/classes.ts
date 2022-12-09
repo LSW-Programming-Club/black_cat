@@ -29,8 +29,8 @@ export class File {
 
   constructor(id: number) {
     this.id = id
-    this.goodData = randomInt(1, 3)
-    this.badData = randomInt(1, 3)
+    this.goodData = randomInt(1, 3) //BALANCING OPTION
+    this.badData = randomInt(1, 3) //BALANCING OPTION
     this.size = this.goodData + this.badData
     this.x = 0
     this.y = 0
@@ -209,7 +209,7 @@ export class Game {
     this.totalFiles = 0
     this.detectedFiles = []
     this.players = [player]
-    this.createFiles(5)
+    this.createFiles(3) // BALANCING OPTION
   }
 
   addPlayer(player: Player) {

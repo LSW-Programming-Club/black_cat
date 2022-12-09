@@ -89,6 +89,8 @@
   </div>
 
   <div id="debugMenu" class="center">
+    <p id="hp"></p>
+    <p id="actionAmount"></p>
     <button id="godStart" onclick="godStart()">Force Start</button>
     <button id="godScout" onclick="classChange('Scout')">Scout</button>
     <button id="godAntivirus" onclick="classChange('Antivirus')">Antivirus</button>
@@ -104,6 +106,14 @@
 
 <script>
   const socket = io();
+
+  socket.on('hp', function (hp) {
+    document.getElementById('hp').innerText = `Computer is at ${hp}HP`
+  })
+
+  socket.on('actionAmount', function (actionAmount) {
+    document.getElementById('actionAmount').innerText = `You have ${actionAmount}/2 actions remaining`
+  })
 
   //TODO: REMOVE AFTER DEBUG
   function godStart() {
@@ -245,11 +255,11 @@
 
   socket.on('error', function (error) {
     document.getElementById('error').innerHTML = error
-    document.getElementById('status').innerHTML = error
+    document.getElementById('status').innerHTML += error + '<br>'
   })
 
   socket.on('success', function (message) {
-    document.getElementById('status').innerHTML = message
+    document.getElementById('status').innerHTML += message + '<br>'
   })
 
   socket.on('end', function (message) {
