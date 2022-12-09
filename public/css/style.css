@@ -29,7 +29,7 @@ html {
 /* All of the below code is for the centering box */
 .center {
   margin: auto;
-  max-width: 600px;
+  max-width: 650px;
   border-radius: 5px;
   background-color: #292c3c;
   padding: 10px;

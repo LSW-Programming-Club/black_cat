@@ -29,11 +29,6 @@ export function handleStart(socket: Socket, roomCode: string) {
     socket.emit('start', 'start')
     socket.to(roomCode).emit('start', 'start')
 
-    // Create initial file locations
-    for (const gameFile of game.files) {
-      gameFile.generateRandomXY(game.files)
-    }
-
     // Emit initial file locations
     socket.emit('file', game.fileList())
     socket.to(roomCode).emit('file', game.fileList())

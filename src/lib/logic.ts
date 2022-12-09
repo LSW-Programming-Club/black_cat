@@ -22,6 +22,36 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
         break
     }
   }
+
+  handleTurn(socket, game)
+}
+
+function handleTurn(socket: Socket, game: Game) {
+  // If players have used all of their actions
+  console.log(game.players.find((player) => player.actions > 0))
+  if (game.players.find((player) => player.actions > 0) === undefined) {
+    // Iterate round count
+    game.round++
+
+    // Reset players actions
+    game.resetPlayerActions()
+
+    // Move all the files
+    game.moveFiles()
+
+    // If odd round then summon new file
+    if (game.round % 2 === 1) {
+      // Create 1 file
+      game.createFiles(1)
+    }
+
+    // Send updated files
+    socket.emit('file', game.fileList())
+    socket.to(game.code).emit('file', game.fileList())
+
+    socket.emit('success', `All players have used their actions. You are now on round ${game.round}`)
+    socket.to(game.code).emit('success', `All players have used their actions. You are now on round ${game.round}`)
+  }
 }
 
 export function playerMove(socket: Socket, game: Game, player: Player) {
@@ -38,6 +68,8 @@ export function playerMove(socket: Socket, game: Game, player: Player) {
   }
   socket.emit('success', `You may move ${steps} steps now`)
   socket.to(game.code).emit('success', `${player.name} has taken a move`)
+
+  handleTurn(socket, game)
 }
 
 export function playerSmash(socket: Socket, game: Game, player: Player, stringX: string, playerY: number) {
@@ -64,6 +96,8 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
   } else {
     socket.emit('error', 'No files to smash. Try another action')
   }
+
+  handleTurn(socket, game)
 }
 
 function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
