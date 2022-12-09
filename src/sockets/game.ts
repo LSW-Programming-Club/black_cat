@@ -2,7 +2,8 @@ import type { Socket } from 'socket.io'
 
 import { actions, games } from '../lib/db'
 
-import { playerAction, playerMove, playerSmash } from '../lib/logic'
+import { Player } from '../lib/classes'
+import { handleTurn, playerAction, playerMove, playerSmash } from '../lib/logic'
 
 export default (socket: Socket) => {
   socket.on('start', (roomCode) => {
@@ -26,6 +27,9 @@ export function handleStart(socket: Socket, roomCode: string) {
   const game = games.find((game) => game.code === roomCode)
   if (game && socket.id === game.host) {
     // Emit that game has started
+    // HOTFIX FIX LATER
+    const dummyPlayer = new Player('dummy', 'dummy')
+    handleTurn(socket, game, dummyPlayer)
     socket.emit('start', 'start')
     socket.to(roomCode).emit('start', 'start')
 

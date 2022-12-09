@@ -26,7 +26,7 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
   handleTurn(socket, game, player)
 }
 
-function handleTurn(socket: Socket, game: Game, player: Player) {
+export function handleTurn(socket: Socket, game: Game, player: Player) {
   // THIS CODE SHOULD NOT BE HERE. SHOULD RELOCATE WHEN HAVE TIME
   socket.emit('hp', game.hp)
   socket.to(game.code).emit('hp', game.hp)

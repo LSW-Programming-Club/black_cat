@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
@@ -33,7 +34,7 @@
           style="color:#e5e5e5;text-decoration:none;" href="https://man7.org/linux/man-pages/man1/cat.1.html"
           target="_blank">cat</a><span class="blink">_</span></span></span>
     <div class="inputs">
-      <label for="playerName">Player Name:</label>
+      <label for="playerName">Your Name:</label>
       <span><input id="playerName" placeholder="_"></input></span>
       <label for="roomCode">Game Code:</label>
       <span><input id="roomCode" placeholder="_"></input></span>
@@ -59,26 +60,26 @@
     </div>
 
     <div class="stats buttons">
-      <label for="playerList" style="display: none;">Players:</label>
+      <label id="playerHeader" for="playerList" style="display: none;">Players:</label>
       <ul id="playerList" style="display: none;">
       </ul>
       <label for="playerClass" style="display: none;">Your Class: </label>
       <p id="playerClass" style="display: none;"></p>
-      <p id="readiness" style="display: none;"></p>
+      <p id="readiness"></p>
       <button id="start" style="display: none" onclick="start()">Start</button>
     </div>
   </div>
 
   <!-- Box shown after the game has begun -->
   <div id="game" class="game" style="display:none;">
-    <h1 id="winLose"></h1>
+    <h1 id="winLose" style="display: none;"></h1>
     <h1 style="text-align: center;">Files</h1>
     <ol id="files">
     </ol>
   </div>
 
   <div id="controlMenu" class="center" style="display:none;">
-    <p id="status"></p>
+    <p id="status" style="overflow:scroll;height: 50px;"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
     <button id="move" onclick="move()">Move</button>
@@ -88,7 +89,7 @@
     <button style="display:none;" id="smash" onclick="smash()">Smash</button>
   </div>
 
-  <div id="debugMenu" class="center">
+  <div id="debugMenu" class="center" style="display: none;">
     <p id="hp"></p>
     <p id="actionAmount"></p>
     <button id="godStart" onclick="godStart()">Force Start</button>
@@ -264,6 +265,7 @@
 
   socket.on('end', function (message) {
     document.getElementById('winLose').innerText = message
+    document.getElementById('winLose').style.display = "block"
   })
 
   socket.on('ready', function (ready) {
@@ -317,6 +319,8 @@
     // Update player list
     document.getElementById('playerList').innerHTML = ''; // Clear existing list
     document.getElementById('playerList').style.display = 'block';
+    document.getElementById('playerHeader').style.display = 'block';
+    document.getElementById('playerGameClass').style.display = 'block';
     for (var i = 0; i < playerData.length; i++) {
       var player = playerData[i];
       document.getElementById('playerList').innerHTML += '<li>' + player.name + '</li>';
@@ -325,7 +329,7 @@
     // Update readiness of players
     document.getElementById('readiness').innerText = playerData.filter((player) => player.ready === true).length + '/' + playerData.length + ' players ready'
     if (playerData.length < 3) {
-      document.getElementById('readiness').innerText += ` Still need ${3 - playerData.length} more player`
+      document.getElementById('readiness').innerText += `, still need ${3 - playerData.length} more player`
       if (3 - playerData.length > 1) {
         document.getElementById('readiness').innerText += 's'
       }

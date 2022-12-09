@@ -30,6 +30,8 @@ html {
 .center {
   margin: auto;
   max-width: 650px;
+  width: 650px;
+  max-width: 100%;
   border-radius: 5px;
   background-color: #292c3c;
   padding: 10px;
@@ -38,6 +40,8 @@ html {
 .center .title {
   font-size: 50pt;
   text-align: center;
+  width: 100%;
+  display: block;
 }
 
 .center .logo {
@@ -101,6 +105,7 @@ html {
   width: fit-content;
   transition-property: background-color, color;
   transition-duration: 0.2s;
+  cursor: pointer;
 }
 
 .center .hostbutton {
@@ -128,7 +133,9 @@ html {
 /* Stuff for in game UI */
 .game {
   margin: auto;
-  max-width: 600px;
+  max-width: 650px;
+  width: 650px;
+  max-width: 100%;
   border-radius: 5px;
   background-color: #292c3c;
   padding: 10px;
@@ -178,6 +185,23 @@ html {
   top: 1px;
 }
 
+#winLose {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  background-color: #f5e0dc;
+  color: #1e1e2e;
+  font-size: 60pt;
+  border-radius: 20px;
+}
+
+#readiness {
+  width: 98vw;
+  text-align: center;
+}
+
 /* Mobile CSS */
 @media(max-width: 600px) {
 
@@ -196,6 +220,8 @@ html {
 
   .center {
     padding: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .center .title {
@@ -224,6 +250,15 @@ html {
 
   #files ul {
     width: 300px;
+  }
+
+  #winLose {
+    top: 0;
+    left: 0;
+    transform: none;
+    z-index: 100;
+    height: 100%;
+    border-radius: 0;
   }
 }
 
