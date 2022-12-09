@@ -76,7 +76,7 @@
     </ol>
   </div>
 
-  <div class="center">
+  <div id="controlMenu" class="center" style="display:none;">
     <p id="status"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
@@ -165,6 +165,7 @@
   socket.on('start', function (start) {
     document.getElementById('centerbox').style.display = 'none'
     document.getElementById('game').style.display = 'block'
+    document.getElementById('controlMenu').style.display = 'block'
     switch (document.getElementById('playerClass').innerText) {
       case 'Scout':
         document.getElementById('detect').style.display = 'inline'
@@ -204,15 +205,28 @@
   })
 
   function host() {
-    socket.emit('host', document.getElementById('playerName').value)
+    var playerName = document.getElementById('playerName').value
+    if (playerName === '') {
+      socket.emit('host', 'Player')
+    } else {
+      socket.emit('host', playerName)
+    }
   }
 
   function join() {
-    socket.emit('join', document.getElementById('roomCode').value, document.getElementById('playerName').value)
+    var playerName = document.getElementById('playerName').value
+    if (playerName === '') {
+      socket.emit('join', document.getElementById('roomCode').value, 'Player')
+    } else {
+      socket.emit('join', document.getElementById('roomCode').value, playerName)
+    }
   }
 
   function classChange(playerClass) {
-    socket.emit('class', document.getElementById('roomCode').value, playerClass)
+    // Check if class has already been picked, if it isn't then send class change
+    if (document.getElementById(playerClass.toLowerCase()).classList[0] != ('greyedout')) {
+      socket.emit('class', document.getElementById('roomCode').value, playerClass)
+    }
   }
 
   function ready() {

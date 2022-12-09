@@ -97,7 +97,7 @@ html {
   border-radius: 5px;
   padding: 10px;
   margin: 5px;
-  min-width: 75px;
+  min-width: 90px;
   width: fit-content;
   transition-property: background-color, color;
   transition-duration: 0.2s;
@@ -122,6 +122,7 @@ html {
 .center button.greyedout {
   background-color: #666;
   color: #cdd6f4;
+  cursor: not-allowed;
 }
 
 /* Stuff for in game UI */
@@ -179,7 +180,9 @@ html {
 
 /* Mobile CSS */
 @media(max-width: 600px) {
-  html, body{
+
+  html,
+  body {
     background-color: #292c3c;
   }
 
@@ -203,7 +206,7 @@ html {
     left: 0;
   }
 
-  .center .stats{
+  .center .stats {
     position: absolute;
     bottom: 0;
     margin-bottom: 10px;
@@ -228,7 +231,8 @@ html {
   .center .title {
     position: relative;
   }
-  .center .stats{
+
+  .center .stats {
     position: relative;
   }
 }
