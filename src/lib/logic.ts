@@ -38,7 +38,7 @@ export function handleTurn(socket: Socket, game: Game, player: Player) {
     game.round++
 
     // Reset players actions
-    game.resetPlayerActions()
+    //game.resetPlayerActions()
 
     // Move all the files
     game.moveFiles(socket, game)
@@ -58,6 +58,7 @@ export function handleTurn(socket: Socket, game: Game, player: Player) {
     socket.to(game.code).emit('success', `All players have used their actions. You are now on round ${game.round}`)
 
     for (const p of game.players) {
+      game.resetPlayerActions()
       socket.emit('actionAmount', p.actions)
     }
   }
@@ -97,6 +98,7 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
   }
 
   if (damagedFiles.length > 0) {
+    console.log("damaged file exists");
     //Reduce players actions by 1
     player.actions--
 

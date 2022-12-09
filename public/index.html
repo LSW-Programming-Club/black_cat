@@ -80,7 +80,7 @@
 
   <div id="controlMenu" class="center" style="display:none;">
     <p id="status" style="overflow:scroll;height: 50px;"></p>
-    <label for="playerGameClass">Class: </label>
+    <!-- <label for="playerGameClass">Class: </label> -->
     <p id="playerGameClass"></p>
     <p id="actionAmount"></p> 
     <p id="hp"></p>
@@ -224,9 +224,6 @@
     } else {
       socket.emit('host', playerName)
     }
-
-    document.getElementById('classselect').style = "display:flex;justify-content:space-between;";
-    document.getElementById('readyup').style = "";
   }
 
   function join() {
@@ -236,9 +233,6 @@
     } else {
       socket.emit('join', document.getElementById('roomCode').value, playerName)
     }
-    // Makes buttons visible upon join
-    document.getElementById('classselect').style = "display:flex;justify-content:space-between;";
-    document.getElementById('readyup').style = "";
   }
 
   function classChange(playerClass) {
@@ -254,11 +248,15 @@
 
   socket.on('code', function (roomCode) {
     document.getElementById('roomCode').value = roomCode
+
+    //show all classes here, since we know roomCode is valid
+    document.getElementById('classselect').style = "display:flex;justify-content:space-between;";
+    document.getElementById('readyup').style = "";
   })
 
   socket.on('class', function (playerClass) {
     document.getElementById('playerClass').innerText = playerClass
-    document.getElementById('playerGameClass').innerText = playerClass
+    document.getElementById('playerGameClass').innerText = "Class: " + playerClass
   })
 
   socket.on('error', function (error) {
