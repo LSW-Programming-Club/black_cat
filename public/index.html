@@ -49,12 +49,12 @@
         <button class="hostbutton" onclick="host()">Host</button>
         <button class="joinbutton" onclick="join()">Join</button>
       </div>
-      <div style="display:flex;justify-content:space-between;" id="classselect">
+      <div style="display: none;" id="classselect">
         <button id="scout" onclick="classChange('Scout')">Scout</button>
         <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
         <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
       </div>
-      <div class="buttongroup" id="readyup">
+      <div class="buttongroup" id="readyup" style="display: none;">
         <button id="ready" onclick="ready()">Ready</button>
       </div>
     </div>
@@ -82,6 +82,9 @@
     <p id="status" style="overflow:scroll;height: 50px;"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
+    <p id="actionAmount"></p> 
+    <p id="hp"></p>
+
     <button id="move" onclick="move()">Move</button>
     <button style="display:none;" id="detect" onclick="action('detect')">Detect</button>
     <button style="display:none;" id="disinfect" onclick="action('disinfect')">Disinfect</button>
@@ -90,8 +93,6 @@
   </div>
 
   <div id="debugMenu" class="center" style="display: none;">
-    <p id="hp"></p>
-    <p id="actionAmount"></p>
     <button id="godStart" onclick="godStart()">Force Start</button>
     <button id="godScout" onclick="classChange('Scout')">Scout</button>
     <button id="godAntivirus" onclick="classChange('Antivirus')">Antivirus</button>
@@ -223,6 +224,9 @@
     } else {
       socket.emit('host', playerName)
     }
+
+    document.getElementById('classselect').style = "display:flex;justify-content:space-between;";
+    document.getElementById('readyup').style = "";
   }
 
   function join() {
@@ -232,6 +236,9 @@
     } else {
       socket.emit('join', document.getElementById('roomCode').value, playerName)
     }
+    // Makes buttons visible upon join
+    document.getElementById('classselect').style = "display:flex;justify-content:space-between;";
+    document.getElementById('readyup').style = "";
   }
 
   function classChange(playerClass) {

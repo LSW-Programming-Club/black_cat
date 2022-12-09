@@ -49,12 +49,17 @@ export function handleTurn(socket: Socket, game: Game, player: Player) {
       game.createFiles(1)
     }
 
+
     // Send updated files
     socket.emit('file', game.fileList())
     socket.to(game.code).emit('file', game.fileList())
 
     socket.emit('success', `All players have used their actions. You are now on round ${game.round}`)
     socket.to(game.code).emit('success', `All players have used their actions. You are now on round ${game.round}`)
+
+    for (const p of game.players) {
+      socket.emit('actionAmount', p.actions)
+    }
   }
 }
 
