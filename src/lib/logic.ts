@@ -117,6 +117,9 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
     socket.emit('error', 'No files to smash. Try another action')
   }
 
+  socket.emit('file', game.fileList())
+  socket.to(game.code).emit('file', game.fileList())
+
   handleTurn(socket, game, player)
 }
 
