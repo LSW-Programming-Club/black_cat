@@ -28,7 +28,8 @@ export default (socket: Socket) => {
   })
 }
 
-function handleHost(socket: Socket, playerName: string) {
+//TODO: REMOVE 'export' AFTER DEBUG
+export function handleHost(socket: Socket, playerName: string) {
   // Create a new player with the users data
   const player = new Player(playerName, socket.id)
 
@@ -43,6 +44,8 @@ function handleHost(socket: Socket, playerName: string) {
   socket.join(game.code)
   socket.emit('code', game.code)
   socket.emit('players', game.playerList())
+  //TODO: REMOVE 'return' AFTER DEBUG
+  return game.code
 }
 
 function handleJoin(socket: Socket, roomCode: string, playerName: string) {
@@ -117,6 +120,9 @@ function handleClass(socket: Socket, roomCode: string, playerClass: string) {
   // Emit an updated list of players to all clients in the room
   socket.to(game.code).emit('players', game.playerList())
   socket.emit('players', game.playerList())
+
+  //TODO: REMOVE AFTER DEBUG
+  socket.emit('start', 'start')
 }
 
 function handleReady(socket: Socket, roomCode: string) {

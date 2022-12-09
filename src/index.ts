@@ -7,6 +7,8 @@ import { Server } from 'socket.io'
 // Import socket handlers
 import lobby from './sockets/lobby'
 import game from './sockets/game'
+//TODO: REMOVE AFTER DEBUG
+import debug from './sockets/debug'
 
 // Web Server Setup
 const app = express()
@@ -33,6 +35,8 @@ const io = new Server(httpServer, {})
 io.on('connection', (socket) => {
   lobby(socket)
   game(socket)
+  //TODO: REMOVE AFTER DEBUG
+  debug(socket)
 })
 
 // Have the server listen for incoming requests

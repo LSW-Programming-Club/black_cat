@@ -21,8 +21,8 @@ export default (socket: Socket) => {
     handleSmash(socket, roomCode, playerX, playerY)
   })
 }
-
-function handleStart(socket: Socket, roomCode: string) {
+//TODO: REMOVE 'export' AFTER DEBUG
+export function handleStart(socket: Socket, roomCode: string) {
   const game = games.find((game) => game.code === roomCode)
   if (game && socket.id === game.host) {
     // Emit that game has started
