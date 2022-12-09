@@ -46,7 +46,7 @@ function handleSmash(socket: Socket, roomCode: string, playerX: string, playerY:
   const game = games.find((game) => game.code === roomCode)
   if (game) {
     const player = game.players.find((player) => player.id === socket.id)
-    if (player) {
+    if (player && player.class) {
       if (!actions[player.class].includes('smash')) {
         socket.emit('error', `${player.class} can't use smash`)
         return

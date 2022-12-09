@@ -56,7 +56,7 @@ export class File {
         // If conflict with already existing game file than try again
         if (gameFile.x === x && gameFile.y === y) {
           this.generateRandomXY(files)
-          break
+          return
         }
       }
       // If the indexes are outside of the cutout, return the value at that index
