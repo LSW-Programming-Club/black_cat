@@ -1,4 +1,5 @@
 import { randomBytes, randomInt } from 'crypto'
+import type { Socket } from 'socket.io'
 
 import { games } from './db'
 
@@ -234,15 +235,44 @@ export class Game {
     }
   }
 
-  moveFiles() {
+  moveFiles(socket: Socket, game: Game) {
     for (const file of this.files) {
       file.moveTowardComputer(this.files)
+      this.computerCollisionDetection(socket, game, file)
     }
   }
 
   resetPlayerActions() {
     for (const player of this.players) {
       player.actions = 2
+    }
+  }
+
+  computerCollisionDetection(socket: Socket, game: Game, checkFile: File) {
+    const computerX = 5
+    const computerY = 5
+    if (checkFile.x === computerX && checkFile.y === computerY) {
+      // Get and calculate HP change BALANCING OPTION
+      let hpChange = 0
+      hpChange = checkFile.goodData * 1
+      hpChange -= checkFile.badData * 3
+      this.hp += hpChange
+
+      // Check if computer is Schrödinger'd
+      if (this.hp <= 0) {
+        socket.emit('end', `I'm sorry, you lost`)
+        socket.to(game.code).emit('end', `I'm sorry, you lost`)
+      } else if (this.hp >= 20) {
+        socket.emit('end', `You won!`)
+        socket.to(game.code).emit('end', `You won!`)
+      } else {
+        socket.emit('success', `File ${checkFile.id} reached the computer. Computer is at ${this.hp}HP`)
+        socket.to(game.code).emit('success', `File ${checkFile.id} reached the computer. Computer is at ${this.hp}HP`)
+      }
+
+      // Remove the file
+      game.files = game.files.filter((file) => file.id != checkFile.id)
+      game.detectedFiles = game.detectedFiles.filter((file) => file.id != checkFile.id)
     }
   }
 

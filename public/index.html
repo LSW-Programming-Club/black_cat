@@ -71,6 +71,7 @@
 
   <!-- Box shown after the game has begun -->
   <div id="game" class="game" style="display:none;">
+    <h1 id="winLose"></h1>
     <h1 style="text-align: center;">Files</h1>
     <ol id="files">
     </ol>
@@ -249,6 +250,10 @@
 
   socket.on('success', function (message) {
     document.getElementById('status').innerHTML = message
+  })
+
+  socket.on('end', function (message) {
+    document.getElementById('winLose').innerText = message
   })
 
   socket.on('ready', function (ready) {

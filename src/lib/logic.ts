@@ -28,7 +28,6 @@ export function playerAction(socket: Socket, game: Game, player: Player, action:
 
 function handleTurn(socket: Socket, game: Game) {
   // If players have used all of their actions
-  console.log(game.players.find((player) => player.actions > 0))
   if (game.players.find((player) => player.actions > 0) === undefined) {
     // Iterate round count
     game.round++
@@ -37,7 +36,7 @@ function handleTurn(socket: Socket, game: Game) {
     game.resetPlayerActions()
 
     // Move all the files
-    game.moveFiles()
+    game.moveFiles(socket, game)
 
     // If odd round then summon new file
     if (game.round % 2 === 1) {
