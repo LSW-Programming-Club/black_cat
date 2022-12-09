@@ -51,6 +51,10 @@ function handleSmash(socket: Socket, roomCode: string, playerX: string, playerY:
         socket.emit('error', `${player.class} can't use smash`)
         return
       }
+      if (player.actions < 1) {
+        socket.emit('error', `You can't smash since you are out of actions`)
+        return
+      }
       if (playerX != undefined && playerX.match('^[A-J]$') && playerY != undefined && playerY > 0 && playerY < 10) {
         playerSmash(socket, game, player, playerX, playerY)
       } else {
