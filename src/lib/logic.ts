@@ -95,8 +95,7 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
     }
   }
 
-  if (damagedFiles.length > 0) {
-    console.log('damaged file exists')
+  if (damagedFiles.length > 0 && damagedFiles.find((file) => file.badData > 0) != undefined) {
     //Reduce players actions by 1
     player.actions--
 
@@ -141,6 +140,11 @@ function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
 
 function handleDisinfect(socket: Socket, game: Game, file: File, player: Player) {
   let removeMB = 3
+  if (!game.detectedFiles.includes(file)) {
+    socket.emit('error', `File ${file.id} hasn't been detected yet please detect it first`)
+    player.actions++
+    return
+  }
   if (file.badData < 3) {
     socket.emit('error', 'This file is already clean. Try another')
     // Refund player's action
