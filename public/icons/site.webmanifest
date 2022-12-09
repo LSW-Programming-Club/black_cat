@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Black Cat",
+    "short_name": "Black Cat",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,8 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
+    "theme_color": "#181825",
+    "background_color": "#181825",
+    "start_url": "https://blackcat.uno",
     "display": "standalone"
 }

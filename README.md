@@ -21,11 +21,15 @@ Files strewn across the board which may or may not contain a virus. The players 
 
 ### Backend
 
-- [ ] Setup DB
+- [x] Setup DB
+- [x] Setup classes
+- [x] Implement class abilities
+- [ ] Implement turns
+- [ ] Implement computer/file interaction
 
 ### Frontend
 
 - [x] Setup CSS
-- [ ] Finish main menu
+- [x] Finish main menu
 - [ ] Finish gameplay menu
 - [ ] Finalize
