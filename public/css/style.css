@@ -124,6 +124,59 @@ html {
   color: #cdd6f4;
 }
 
+/* Stuff for in game UI */
+.game {
+  margin: auto;
+  max-width: 600px;
+  border-radius: 5px;
+  background-color: #292c3c;
+  padding: 10px;
+  min-width: 300px;
+}
+
+#files {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+#files ul {
+  list-style: none;
+  width: 45%;
+  margin: 10px;
+  margin-top: 30px;
+  background-color: #f9e2af;
+  color: #181825;
+  padding: 5px;
+  position: relative;
+  border-radius: 0px 5px 5px 5px;
+  font-size: 16pt;
+}
+
+#tab {
+  width: 75px;
+  display: block;
+  background-color: #fab387;
+  height: 20px;
+  position: absolute;
+  border-radius: 5px 5px 0px 0px;
+  float: left;
+  top: -20px;
+  left: 0;
+}
+
+#tab .curve {
+  right: -73px;
+  border-radius: 0 0 0 10px;
+  box-shadow: -10px 0 0 0 #fab387;
+  position: relative;
+  width: 18px;
+  display: block;
+  height: 19px;
+  top: 1px;
+}
+
 /* Mobile CSS */
 @media(max-width: 600px) {
   html, body{
@@ -138,6 +191,10 @@ html {
     font-size: 10pt;
   }
 
+  .center {
+    padding: 0;
+  }
+
   .center .title {
     font-size: 37pt;
     top: 0;
@@ -150,6 +207,20 @@ html {
     position: absolute;
     bottom: 0;
     margin-bottom: 10px;
+  }
+
+  .game {
+    width: 100%;
+    padding: 0;
+  }
+
+  #files {
+    justify-content: center;
+    margin: 0;
+  }
+
+  #files ul {
+    width: 300px;
   }
 }
 

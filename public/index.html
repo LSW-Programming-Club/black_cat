@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -70,7 +69,13 @@
   </div>
 
   <!-- Box shown after the game has begun -->
-  <div id="game" class="center" style="display:none;">
+  <div id="game" class="game" style="display:none;">
+    <h1 style="text-align: center;">Files</h1>
+    <ol id="files">
+    </ol>
+  </div>
+
+  <div class="center">
     <p id="status"></p>
     <label for="playerGameClass">Class: </label>
     <p id="playerGameClass"></p>
@@ -79,11 +84,8 @@
     <button style="display:none;" id="disinfect" onclick="action('disinfect')">Disinfect</button>
     <button style="display:none;" id="purge" onclick="action('purge')">Purge</button>
     <button style="display:none;" id="smash" onclick="smash()">Smash</button>
-    <ol id="files">
-    </ol>
   </div>
 
-  //TODO: REMOVE AFTER DEBUG
   <div id="debugMenu" class="center">
     <button id="godStart" onclick="godStart()">Force Start</button>
     <button id="godScout" onclick="classChange('Scout')">Scout</button>
@@ -92,14 +94,12 @@
     <button id="godActions" onclick="actionUp()">Add Action</button>
   </div>
 </body>
-
 </html>
 
 <!-- End of HTML, beginning of JS -->
 
 <script>
   const socket = io();
-
 
   //TODO: REMOVE AFTER DEBUG
   function godStart() {
@@ -149,9 +149,9 @@
       var file = files[i];
       document.getElementById('files').innerHTML +=
         `<ul class="files" id=${file.id}>
-      <li id=${file.id}> File: ${file.id} </li>
-      <li id=${file.id}> X: ${file.x} </li>
-      <li id=${file.id}> Y: ${file.y} </li>
+      <span id="tab"><span class="curve"></span></span>
+      <span style="font-size:24pt;float: right;right:50px;top:50%;transform:translatey(-50%);position: relative;">${file.id} </span>
+      <li id=${file.id}> Location: ${file.x}${file.y} </li>
       <li id=${file.id}> Good Data: ${file.goodData} </li>
       <li id=${file.id}> Bad Data: ${file.badData} </li>
       </ul>`
