@@ -30,7 +30,7 @@ export class File {
   constructor(id: number) {
     this.id = id
     this.goodData = randomInt(1, 3) //BALANCING OPTION
-    this.badData = randomInt(1, 3) //BALANCING OPTION
+    this.badData = randomInt(1, 3) * 3 //BALANCING OPTION
     this.size = this.goodData + this.badData
     this.x = 0
     this.y = 0
@@ -255,7 +255,7 @@ export class Game {
       // Get and calculate HP change BALANCING OPTION
       let hpChange = 0
       hpChange = checkFile.goodData * 1
-      hpChange -= checkFile.badData * 3
+      hpChange -= checkFile.badData * 1
       this.hp += hpChange
 
       // Check if computer is Schrödinger'd

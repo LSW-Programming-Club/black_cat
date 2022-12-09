@@ -102,8 +102,8 @@ export function playerSmash(socket: Socket, game: Game, player: Player, stringX:
 
     // Damage files found
     for (const damagedFile of damagedFiles) {
-      if (damagedFile.badData > 0) {
-        damagedFile.badData--
+      if (damagedFile.badData > 2) {
+        damagedFile.badData -= 3
       }
     }
 
@@ -140,14 +140,14 @@ function handleDetect(socket: Socket, game: Game, file: File, player: Player) {
 }
 
 function handleDisinfect(socket: Socket, game: Game, file: File, player: Player) {
-  let removeMB = 1
-  if (file.badData < 1) {
+  let removeMB = 3
+  if (file.badData < 3) {
     socket.emit('error', 'This file is already clean. Try another')
     // Refund player's action
     player.actions++
     return
-  } else if (file.badData > 1) {
-    removeMB = 2
+  } else if (file.badData > 5) {
+    removeMB = 6
   }
   file.badData = file.badData - removeMB
   if (file.badData === 0) {
