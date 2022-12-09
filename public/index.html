@@ -54,17 +54,21 @@
         <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
         <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
       </div>
-      <div class="buttongroup" id="readyup" style="display: none;">
+      <div class="buttongroup" id="readyup" style="display:none;">
         <button id="ready" onclick="ready()">Ready</button>
       </div>
     </div>
 
-    <div class="stats buttons">
-      <label id="playerHeader" for="playerList" style="display: none;">Players:</label>
-      <ul id="playerList" style="display: none;">
+    <div id="playerContainer" class="stats buttons" style="text-align: left; width: 90%;display:none;">
+      <h3 id="playerHeader" for="playerList" style="display: none;">Players:</h3>
+      <ul id="playerList" style="margin-left: 30px;display: none;">
       </ul>
-      <label for="playerClass" style="display: none;">Your Class: </label>
-      <p id="playerClass" style="display: none;"></p>
+      <br>
+      <hr>
+      <br>
+      <label id="classLabel" for="playerClass">Your Class: </label>
+      <span id="playerClass"></span>
+      <br><br>
       <p id="readiness"></p>
       <button id="start" style="display: none" onclick="start()">Start</button>
     </div>
@@ -73,26 +77,32 @@
   <!-- Box shown after the game has begun -->
   <div id="game" class="game" style="display:none;">
     <h1 id="winLose" style="display: none;"></h1>
+    <span id="cover" class="cover" style="display:none;"></span>
     <h1 style="text-align: center;">Files</h1>
     <ol id="files">
     </ol>
   </div>
 
   <div id="controlMenu" class="center" style="display:none;">
-    <p id="status" style="overflow:scroll;height: 50px;"></p>
-    <!-- <label for="playerGameClass">Class: </label> -->
-    <p id="playerGameClass"></p>
-    <p id="actionAmount"></p> 
-    <p id="hp"></p>
-
-    <button id="move" onclick="move()">Move</button>
-    <button style="display:none;" id="detect" onclick="action('detect')">Detect</button>
-    <button style="display:none;" id="disinfect" onclick="action('disinfect')">Disinfect</button>
-    <button style="display:none;" id="purge" onclick="action('purge')">Purge</button>
-    <button style="display:none;" id="smash" onclick="smash()">Smash</button>
+    <p id="hp" style="float:left;font-size:14pt;"></p>
+    <p id="actionAmount" style="float:right;font-size:14pt;"></p>
+    <br><br>
+    <div style="display:flex;justify-content:center;align-content: center;align-content: center;">
+      <button id="move" onclick="move()">Move</button>
+      <button style="display:none;" id="detect" onclick="action('detect')">Detect</button>
+      <button style="display:none;" id="disinfect" onclick="action('disinfect')">Disinfect</button>
+      <button style="display:none;" id="purge" onclick="action('purge')">Purge</button>
+      <button style="display:none;" id="smash" onclick="smash()">Smash</button>
+    </div>
+    <span id="direction" style="font-size: 16pt;width:100%;text-align:center;display:block;"></span>
+    <br>
+    <hr>
+    <br>
+    <h2>Log:</h2>
+    <p id="status"></p>
   </div>
 
-  <div id="debugMenu" class="center" style="display: none;">
+  <div id="debugMenu" class="center" style="display: block;">
     <button id="godStart" onclick="godStart()">Force Start</button>
     <button id="godScout" onclick="classChange('Scout')">Scout</button>
     <button id="godAntivirus" onclick="classChange('Antivirus')">Antivirus</button>
@@ -137,6 +147,7 @@
 
     // Loop through the elements and add an event listener to each one
     for (var i = 0; i < files.length; i++) {
+      files[i].classList.add("highlight");
       files[i].addEventListener('click', (e) => {
         // When the event is triggered, retrieve the value of the element and send it as the file ID
         socket.emit('action', document.getElementById('roomCode').value, action, e.target.id)
@@ -256,7 +267,7 @@
 
   socket.on('class', function (playerClass) {
     document.getElementById('playerClass').innerText = playerClass
-    document.getElementById('playerGameClass').innerText = "Class: " + playerClass
+    document.getElementById('playerGameClass').innerText = playerClass
   })
 
   socket.on('error', function (error) {
@@ -271,6 +282,7 @@
   socket.on('end', function (message) {
     document.getElementById('winLose').innerText = message
     document.getElementById('winLose').style.display = "block"
+    document.getElementById('cover').style.display = "block"
   })
 
   socket.on('ready', function (ready) {
@@ -322,7 +334,8 @@
     }
 
     // Update player list
-    document.getElementById('playerList').innerHTML = ''; // Clear existing list
+    document.getElementById('playerList').innerHTML = ''; // Clear existing list\
+    document.getElementById('playerContainer').style.display = 'block';
     document.getElementById('playerList').style.display = 'block';
     document.getElementById('playerHeader').style.display = 'block';
     document.getElementById('playerGameClass').style.display = 'block';
