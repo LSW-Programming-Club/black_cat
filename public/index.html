@@ -50,7 +50,7 @@
         <button class="joinbutton" onclick="join()">Join</button>
       </div>
       <div style="display: none;" id="classselect">
-        <button id="scout" onclick="classChange('Scout')">Scout</button>
+        <button id="scout" onclick="classChange('Scout')">Scanner</button>
         <button id="antivirus" onclick="classChange('Antivirus')">Antivirus</button>
         <button id="firewall" onclick="classChange('Firewall')">Firewall</button>
       </div>
@@ -66,9 +66,8 @@
       <br>
       <hr>
       <br>
-      <label id="classLabel" for="playerClass">Your Class: </label>
-      <span id="playerClass"></span>
-      <br><br>
+      <label style="display: none;" id="classLabel" for="playerClass">Your Class: </label>
+      <span style="display: none;" id="playerClass"></span>
       <p id="readiness"></p>
       <button id="start" style="display: none" onclick="start()">Start</button>
     </div>
@@ -84,25 +83,25 @@
   </div>
 
   <div id="controlMenu" class="center" style="display:none;">
-    <p id="hp" style="float:left;font-size:14pt;"></p>
-    <p id="actionAmount" style="float:right;font-size:14pt;"></p>
-    <br><br>
-    <div style="display:flex;justify-content:center;align-content: center;align-content: center;">
+    <p id="hp"></p>
+    <p id="actionAmount"></p>
+    <br class="hidemobile"><br class="hidemobile">
+    <div id="controlButtons">
       <button id="move" onclick="move()">Move</button>
       <button style="display:none;" id="detect" onclick="action('detect')">Detect</button>
       <button style="display:none;" id="disinfect" onclick="action('disinfect')">Disinfect</button>
       <button style="display:none;" id="purge" onclick="action('purge')">Purge</button>
-      <button style="display:none;" id="smash" onclick="smash()">Smash</button>
+      <button style="display:none;" id="smash" onclick="smash()">Clean</button>
     </div>
     <span id="direction" style="font-size: 16pt;width:100%;text-align:center;display:block;"></span>
-    <br>
-    <hr>
-    <br>
+    <br class="hidemobile">
+    <hr class="hidemobile">
+    <br class="hidemobile">
     <h2>Log:</h2>
     <p id="status"></p>
   </div>
 
-  <div id="debugMenu" class="center" style="display: block;">
+  <div id="debugMenu" class="center" style="display: none;">
     <button id="godStart" onclick="godStart()">Force Start</button>
     <button id="godScout" onclick="classChange('Scout')">Scout</button>
     <button id="godAntivirus" onclick="classChange('Antivirus')">Antivirus</button>
@@ -267,7 +266,6 @@
 
   socket.on('class', function (playerClass) {
     document.getElementById('playerClass').innerText = playerClass
-    document.getElementById('playerGameClass').innerText = playerClass
   })
 
   socket.on('error', function (error) {
@@ -338,7 +336,6 @@
     document.getElementById('playerContainer').style.display = 'block';
     document.getElementById('playerList').style.display = 'block';
     document.getElementById('playerHeader').style.display = 'block';
-    document.getElementById('playerGameClass').style.display = 'block';
     for (var i = 0; i < playerData.length; i++) {
       var player = playerData[i];
       document.getElementById('playerList').innerHTML += '<li>' + player.name + '</li>';

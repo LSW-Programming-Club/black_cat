@@ -209,6 +209,24 @@ html {
   display: flex;
   flex-direction: column-reverse;
   overflow-x: hidden;
+  font-size: 16pt;
+}
+
+#controlButtons {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-content: center;
+}
+
+#hp {
+  float: left;
+  font-size: 14pt;
+}
+
+#actionAmount {
+  float: right;
+  font-size: 14pt;
 }
 
 .highlight {
@@ -290,6 +308,26 @@ html {
     z-index: 100;
     height: 100%;
     border-radius: 0;
+  }
+
+  #status {
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 12pt;
+  }
+
+  #hp,#actionAmount {
+    float: none;
+    text-align: center;
+  }
+
+  #controlButtons {
+    display: block;
+    text-align: center;
+  }
+
+  .hidemobile {
+    display: none;
   }
 }
 
